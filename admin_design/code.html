@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="zh-CN"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>西华师范数智瞭望系统 - 管理员登录</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;600;700&amp;family=Inter:wght@400;500&amp;family=JetBrains+Mono:wght@500&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                "cyber-bg": "#0a0a2e",
+                "cyber-cyan": "#00f2ff",
+                "cyber-magenta": "#ff00ff",
+                "primary": "#00f2ff",
+                "surface": "#0a0a2e",
+                "on-surface": "#ffffff",
+                "outline": "#00f2ff",
+                "primary-fixed": "#e0e0ff",
+                "surface-container": "#dbf1fe",
+            },
+            "fontFamily": {
+                "label-md": ["JetBrains Mono"],
+                "headline-sm": ["Hanken Grotesk"],
+                "body-lg": ["Inter"],
+                "display-lg": ["Hanken Grotesk"],
+                "body-sm": ["Inter"],
+                "headline-lg": ["Hanken Grotesk"],
+                "headline-md": ["Hanken Grotesk"],
+                "body-md": ["Inter"],
+                "headline-lg-mobile": ["Hanken Grotesk"]
+            }
+          },
+        }
+      }
+    </script>
+<style>
+        body { 
+            font-family: 'Inter', sans-serif;
+            background-color: #0a0a2e;
+            color: white;
+            overflow: hidden;
+        }
+        
+        .cyber-grid {
+            background-image: 
+                linear-gradient(rgba(0, 242, 255, 0.05) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 242, 255, 0.05) 1px, transparent 1px);
+            background-size: 30px 30px;
+        }
+
+        .glitch-text {
+            position: relative;
+            text-shadow: 0.05em 0 0 #ff00ff, -0.05em -0.025em 0 #00f2ff;
+            animation: glitch 2s infinite;
+        }
+
+        @keyframes glitch {
+            0% { text-shadow: 0.05em 0 0 #ff00ff, -0.05em -0.025em 0 #00f2ff; }
+            14% { text-shadow: 0.05em 0 0 #ff00ff, -0.05em -0.025em 0 #00f2ff; }
+            15% { text-shadow: -0.05em -0.025em 0 #ff00ff, 0.025em 0.025em 0 #00f2ff; }
+            49% { text-shadow: -0.05em -0.025em 0 #ff00ff, 0.025em 0.025em 0 #00f2ff; }
+            50% { text-shadow: 0.025em 0.05em 0 #ff00ff, 0.05em 0 0 #00f2ff; }
+            99% { text-shadow: 0.025em 0.05em 0 #ff00ff, 0.05em 0 0 #00f2ff; }
+            100% { text-shadow: -0.025em 0 0 #ff00ff, -0.025em -0.025em 0 #00f2ff; }
+        }
+
+        .cyber-card {
+            background: rgba(10, 10, 46, 0.7);
+            backdrop-filter: blur(25px);
+            border: 2px solid #00f2ff;
+            box-shadow: 0 0 30px rgba(0, 242, 255, 0.2), inset 0 0 20px rgba(0, 242, 255, 0.1);
+            clip-path: polygon(0 0, 100% 0, 100% calc(100% - 30px), calc(100% - 30px) 100%, 0 100%);
+        }
+
+        .cyber-input {
+            background: rgba(0, 242, 255, 0.03);
+            border: 1px solid rgba(0, 242, 255, 0.2);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .cyber-input:focus-within {
+            border-color: #00f2ff;
+            box-shadow: 0 0 12px rgba(0, 242, 255, 0.3);
+            background: rgba(0, 242, 255, 0.08);
+        }
+
+        .pixel-btn {
+            background: #ff00ff;
+            color: white;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            position: relative;
+            overflow: hidden;
+            border: none;
+            clip-path: polygon(8% 0, 100% 0, 100% 70%, 92% 100%, 0 100%, 0 30%);
+            transition: all 0.2s ease;
+        }
+
+        .pixel-btn:hover {
+            transform: scale(1.02);
+            box-shadow: 0 0 20px rgba(255, 0, 255, 0.5);
+        }
+
+        .pixel-btn::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+            animation: scan 2.5s infinite;
+        }
+
+        @keyframes scan {
+            0% { left: -100%; }
+            100% { left: 100%; }
+        }
+
+        .data-stream {
+            position: absolute;
+            width: 1px;
+            height: 150px;
+            background: linear-gradient(to bottom, transparent, #00f2ff, transparent);
+            animation: drop 4s infinite linear;
+            opacity: 0.3;
+        }
+
+        @keyframes drop {
+            0% { transform: translateY(-300px); opacity: 0; }
+            20% { opacity: 0.6; }
+            80% { opacity: 0.6; }
+            100% { transform: translateY(110vh); opacity: 0; }
+        }
+
+        .pixel-corner {
+            position: absolute;
+            width: 12px;
+            height: 12px;
+            border-style: solid;
+            border-color: #ff00ff;
+            z-index: 20;
+        }
+        .corner-tl { top: -3px; left: -3px; border-width: 3px 0 0 3px; }
+        .corner-tr { top: -3px; right: -3px; border-width: 3px 3px 0 0; }
+        .corner-bl { bottom: -3px; left: -3px; border-width: 0 0 3px 3px; }
+        .corner-br { bottom: -3px; right: -3px; border-width: 0 3px 3px 0; }
+    </style>
+</head>
+<body class="min-h-screen cyber-grid relative overflow-hidden flex items-center justify-center">
+<!-- Background Particles -->
+<div class="fixed inset-0 pointer-events-none z-0" id="matrix"></div>
+<!-- Main Container -->
+<div class="relative z-10 w-full max-w-6xl px-8 flex flex-col md:flex-row items-center gap-16">
+<!-- Left Side: Branding/Title -->
+<div class="flex-1 text-left hidden lg:block">
+<div class="inline-block mb-6 border-b-2 border-cyber-cyan pb-2">
+<span class="font-label-md text-cyber-magenta text-xs uppercase tracking-[0.3em]">系统正在初始化...</span>
+</div>
+<h1 class="font-headline-lg text-cyber-cyan glitch-text text-[64px] font-bold leading-none tracking-tighter mb-4">
+                西华师范<br/>数智瞭望系统
+            </h1>
+<div class="flex items-center gap-4 mt-6">
+<div class="w-20 h-[2px] bg-cyber-magenta"></div>
+<p class="font-label-md text-cyber-cyan/60 text-sm uppercase tracking-widest">管理控制台 V2.0.4</p>
+</div>
+<div class="mt-12 grid grid-cols-2 gap-8 opacity-40">
+<div class="border-l-2 border-cyber-cyan/30 pl-4">
+<div class="text-[10px] font-label-md text-cyber-cyan uppercase">系统负载</div>
+<div class="text-xl font-label-md text-white">0.42ms</div>
+</div>
+<div class="border-l-2 border-cyber-cyan/30 pl-4">
+<div class="text-[10px] font-label-md text-cyber-cyan uppercase">活动节点</div>
+<div class="text-xl font-label-md text-white">128 / 128</div>
+</div>
+</div>
+</div>
+<!-- Right Side: Login Card -->
+<main class="w-full max-w-md">
+<!-- Mobile Header (Visible only on small screens) -->
+<div class="lg:hidden text-center mb-10">
+<h1 class="font-headline-lg-mobile text-cyber-cyan glitch-text text-[32px] font-bold leading-tight">
+                    西华师范数智瞭望系统
+                </h1>
+<p class="font-label-md text-cyber-cyan/60 text-[10px] uppercase mt-2">管理控制台 V2.0.4</p>
+</div>
+<div class="cyber-card p-10 relative">
+<!-- Decorative Corners -->
+<div class="pixel-corner corner-tl"></div>
+<div class="pixel-corner corner-tr"></div>
+<div class="pixel-corner corner-bl"></div>
+<div class="pixel-corner corner-br"></div>
+<!-- Logo Area -->
+<div class="flex justify-center mb-10">
+<div class="relative group">
+<div class="absolute inset-0 bg-cyber-cyan/30 blur-2xl rounded-full scale-150 opacity-50 group-hover:opacity-100 transition-opacity"></div>
+<div class="w-24 h-24 border-2 border-dashed border-cyber-cyan flex items-center justify-center p-5 relative bg-cyber-bg/80 backdrop-blur-md">
+<img alt="Logo" class="w-full h-full object-contain filter brightness-125" src="https://lh3.googleusercontent.com/aida/AP1WRLuJqDJhokwYPVDNccTmCNReLCychohGVYddZwIOyriyZ-TtZ7zsqpBFGuOS-xqsbRhq-DgRz4qPKCxtDIeQoYhO6IHgHHqE8aEGhSqgCHr1VLtaF9t4yTgzoEytZDQQYiMst6slgAhdeb8RZsd0YyMSkte-ImnrnI3Snwse0B-cUYK5IeGpEb9CoSU1huFyjqKR2FyhP6n63_tvAJHIX0GsIHuH9Ae0L02DFpGLxY4Y0JmSFxlTOpNBq2JN"/>
+<div class="absolute left-0 top-0 w-full h-[2px] bg-cyber-cyan shadow-[0_0_15px_#00f2ff] animate-[scan_3s_infinite_alternate] z-20"></div>
+</div>
+</div>
+</div>
+<div class="text-center mb-10">
+<h2 class="font-headline-sm text-white text-xl tracking-[0.2em] uppercase">管理员登录</h2>
+<div class="w-16 h-1 bg-cyber-magenta mx-auto mt-3"></div>
+</div>
+<!-- Form -->
+<form class="space-y-6" id="loginForm" onsubmit="handleLogin(event)">
+<div class="space-y-2">
+<label class="font-label-md text-[11px] text-cyber-cyan/80 block uppercase ml-1 tracking-wider">账号</label>
+<div class="flex items-center cyber-input rounded-none px-4 py-4">
+<span class="material-symbols-outlined text-cyber-cyan text-[22px] mr-4">account_circle</span>
+<input class="w-full bg-transparent border-none outline-none focus:ring-0 font-label-md text-white placeholder:text-cyber-cyan/20 text-sm" id="username" placeholder="请输入管理员账号" required="" type="text"/>
+</div>
+</div>
+<div class="space-y-2">
+<label class="font-label-md text-[11px] text-cyber-cyan/80 block uppercase ml-1 tracking-wider">密码</label>
+<div class="flex items-center cyber-input rounded-none px-4 py-4">
+<span class="material-symbols-outlined text-cyber-cyan text-[22px] mr-4">key</span>
+<input class="w-full bg-transparent border-none outline-none focus:ring-0 font-label-md text-white placeholder:text-cyber-cyan/20 text-sm" id="password" placeholder="请输入密码" required="" type="password"/>
+<button class="ml-2 text-cyber-cyan/40 hover:text-cyber-cyan transition-colors" onclick="togglePassword()" type="button">
+<span class="material-symbols-outlined text-[22px]" id="eyeIcon">visibility</span>
+</button>
+</div>
+</div>
+<!-- Utilities -->
+<div class="flex items-center justify-between pt-2">
+<label class="flex items-center cursor-pointer group">
+<div class="relative flex items-center">
+<input class="peer hidden" type="checkbox"/>
+<div class="w-5 h-5 border border-cyber-cyan/40 peer-checked:bg-cyber-cyan peer-checked:border-cyber-cyan transition-all flex items-center justify-center">
+<span class="material-symbols-outlined text-cyber-bg text-[14px] font-bold hidden peer-checked:block">check</span>
+</div>
+</div>
+<span class="ml-3 font-label-md text-[11px] text-cyber-cyan/60 group-hover:text-cyber-cyan transition-colors uppercase tracking-widest">记住我</span>
+</label>
+<a class="font-label-md text-[11px] text-cyber-cyan/60 hover:text-cyber-magenta transition-colors border-b border-transparent hover:border-cyber-magenta uppercase tracking-widest" href="#">找回密码</a>
+</div>
+<!-- Feedback Area -->
+<div class="hidden text-cyber-magenta font-label-md text-[12px] flex items-center justify-center gap-3 border border-cyber-magenta/40 bg-cyber-magenta/10 py-3" id="errorMessage">
+<span class="material-symbols-outlined text-[18px]">warning</span>
+<span>认证失败: 账号或密码错误</span>
+</div>
+<div class="hidden text-cyber-cyan font-label-md text-[12px] flex items-center justify-center gap-3 border border-cyber-cyan/40 bg-cyber-cyan/10 py-3" id="successMessage">
+<span class="material-symbols-outlined text-[18px]">terminal</span>
+<span>会话开始: 正在进入系统...</span>
+</div>
+<!-- Submit Button -->
+<button class="pixel-btn w-full py-5 text-white font-headline-sm text-lg flex items-center justify-center space-x-3 relative mt-4" id="submitBtn" type="submit">
+<span class="relative z-10" id="btnText">执行登录</span>
+<span class="hidden w-6 h-6 border-3 border-white/30 border-t-white rounded-full animate-spin" id="loadingSpinner"></span>
+</button>
+</form>
+<!-- HUD Details -->
+<div class="mt-10 flex justify-between items-end opacity-40">
+<div class="flex gap-1.5 pb-1">
+<div class="w-1 h-4 bg-cyber-cyan"></div>
+<div class="w-1 h-4 bg-cyber-cyan"></div>
+<div class="w-1 h-4 bg-cyber-cyan"></div>
+</div>
+<div class="text-right">
+<div class="font-label-md text-[9px] text-cyber-cyan/80 uppercase mb-1">系统环境</div>
+<div class="font-label-md text-[10px] text-cyber-cyan">节点 ID: CWNU-SERVER-04</div>
+</div>
+</div>
+</div>
+<!-- Footer -->
+<footer class="mt-12 text-center opacity-40">
+<p class="font-label-md text-[11px] text-cyber-cyan uppercase tracking-[0.15em]">
+                    © 2026 西华师范大学 / 数据加密 256-BIT
+                </p>
+</footer>
+</main>
+</div>
+<script>
+        // Matrix-like background effect
+        function createMatrix() {
+            const container = document.getElementById('matrix');
+            const count = 45; // More drops for desktop
+            for(let i=0; i<count; i++) {
+                const stream = document.createElement('div');
+                stream.className = 'data-stream';
+                stream.style.left = Math.random() * 100 + 'vw';
+                stream.style.animationDuration = (Math.random() * 3 + 2) + 's';
+                stream.style.animationDelay = Math.random() * 5 + 's';
+                container.appendChild(stream);
+            }
+        }
+        createMatrix();
+
+        function togglePassword() {
+            const pwdInput = document.getElementById('password');
+            const eyeIcon = document.getElementById('eyeIcon');
+            if (pwdInput.type === 'password') {
+                pwdInput.type = 'text';
+                eyeIcon.textContent = 'visibility_off';
+            } else {
+                pwdInput.type = 'password';
+                eyeIcon.textContent = 'visibility';
+            }
+        }
+
+        async function handleLogin(event) {
+            event.preventDefault();
+            
+            const btn = document.getElementById('submitBtn');
+            const btnText = document.getElementById('btnText');
+            const loadingSpinner = document.getElementById('loadingSpinner');
+            const errorMsg = document.getElementById('errorMessage');
+            const successMsg = document.getElementById('successMessage');
+            
+            errorMsg.classList.add('hidden');
+            successMsg.classList.add('hidden');
+            
+            btn.disabled = true;
+            btnText.classList.add('opacity-0');
+            loadingSpinner.classList.remove('hidden');
+            
+            const username = document.getElementById('username').value;
+            const isError = username === 'error'; 
+
+            setTimeout(() => {
+                loadingSpinner.classList.add('hidden');
+                btnText.classList.remove('opacity-0');
+                btn.disabled = false;
+
+                if (isError) {
+                    errorMsg.classList.remove('hidden');
+                    const card = document.querySelector('.cyber-card');
+                    card.classList.add('animate-pulse');
+                    setTimeout(() => card.classList.remove('animate-pulse'), 500);
+                } else {
+                    successMsg.classList.remove('hidden');
+                    // Logic to proceed after success
+                }
+            }, 2000);
+        }
+    </script>
+</body></html>

@@ -1,0 +1,497 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="zh-CN"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>西华师范数智嘹望 - 数据存储</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&amp;family=Space+Grotesk:wght@300;500;700&amp;family=Plus+Jakarta+Sans:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "inverse-primary": "#005ac2",
+                    "error": "#ffb4ab",
+                    "on-surface-variant": "#c2c6d6",
+                    "on-secondary-fixed-variant": "#005144",
+                    "error-container": "#93000a",
+                    "surface-bright": "#363941",
+                    "tertiary": "#dab9ff",
+                    "secondary-fixed": "#26fedc",
+                    "outline": "#8c909f",
+                    "secondary": "#c7fff0",
+                    "surface-container-high": "#272a31",
+                    "primary-container": "#4c8eff",
+                    "background": "#10131a",
+                    "on-background": "#e1e2ec",
+                    "on-tertiary-fixed": "#2a0053",
+                    "on-secondary-fixed": "#00201a",
+                    "on-primary-fixed-variant": "#004494",
+                    "primary": "#adc6ff",
+                    "on-tertiary-fixed-variant": "#611baa",
+                    "surface-dim": "#10131a",
+                    "on-error-container": "#ffdad6",
+                    "outline-variant": "#414754",
+                    "surface": "#10131a",
+                    "surface-variant": "#32353d",
+                    "surface-container-lowest": "#0b0e15",
+                    "on-secondary-container": "#006a5a",
+                    "on-error": "#690005",
+                    "on-primary": "#002e69",
+                    "surface-tint": "#adc6ff",
+                    "inverse-surface": "#e1e2ec",
+                    "tertiary-container": "#b072fb",
+                    "tertiary-fixed": "#eedbff",
+                    "surface-container-low": "#191b23",
+                    "tertiary-fixed-dim": "#dab9ff",
+                    "surface-container-highest": "#32353d",
+                    "primary-fixed": "#d8e2ff",
+                    "secondary-fixed-dim": "#00dfc1",
+                    "on-tertiary": "#460084",
+                    "on-secondary": "#00382f",
+                    "secondary-container": "#00f2d1",
+                    "on-surface": "#e1e2ec",
+                    "on-primary-container": "#00285d",
+                    "inverse-on-surface": "#2d3038",
+                    "surface-container": "#1d2027",
+                    "primary-fixed-dim": "#adc6ff",
+                    "on-tertiary-container": "#3d0075",
+                    "on-primary-fixed": "#001a41"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "gutter": "16px",
+                    "container-margin": "24px",
+                    "unit": "4px",
+                    "sidebar-width": "260px",
+                    "card-padding": "20px"
+            },
+            "fontFamily": {
+                    "label-pixel": ["Space Mono"],
+                    "display-lg": ["Space Grotesk"],
+                    "headline-lg": ["Space Grotesk"],
+                    "body-sm": ["Plus Jakarta Sans"],
+                    "title-md": ["Space Grotesk"],
+                    "body-lg": ["Plus Jakarta Sans"]
+            },
+            "fontSize": {
+                    "label-pixel": ["12px", {"lineHeight": "1", "fontWeight": "700"}],
+                    "display-lg": ["48px", {"lineHeight": "1.1", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "headline-lg": ["32px", {"lineHeight": "1.2", "fontWeight": "700"}],
+                    "body-sm": ["14px", {"lineHeight": "1.5", "fontWeight": "400"}],
+                    "title-md": ["20px", {"lineHeight": "1.4", "fontWeight": "600"}],
+                    "body-lg": ["16px", {"lineHeight": "1.6", "fontWeight": "400"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .pixel-border-b { border-bottom: 2px solid; }
+        .pixel-card { 
+            position: relative;
+            background: #1d2027;
+            border: 2px solid #414754;
+            transition: all 0.2s ease;
+        }
+        .pixel-card:hover {
+            border-color: #adc6ff;
+            box-shadow: 0 0 12px rgba(58, 134, 255, 0.4);
+        }
+        .pixel-header-strip-blue { border-top: 4px solid #3A86FF; }
+        .pixel-header-strip-purple { border-top: 4px solid #b072fb; }
+        .pixel-header-strip-green { border-top: 4px solid #00dfc1; }
+        .pixel-button {
+            border-bottom: 3px solid rgba(0,0,0,0.3);
+            transition: transform 0.1s, border-bottom 0.1s;
+        }
+        .pixel-button:active {
+            transform: translateY(2px);
+            border-bottom: 0px solid transparent;
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .status-chip {
+            font-family: 'Space Mono', monospace;
+            padding: 2px 8px;
+            font-size: 10px;
+            text-transform: uppercase;
+        }
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: #0b0e15; }
+        ::-webkit-scrollbar-thumb { background: #414754; }
+        ::-webkit-scrollbar-thumb:hover { background: #8c909f; }
+    </style>
+</head>
+<body class="bg-background text-on-background font-body-lg overflow-hidden">
+<!-- Side Navigation Shell -->
+<nav class="fixed left-0 top-0 h-full w-[260px] bg-surface-container-lowest border-r-2 border-outline-variant flex flex-col py-gutter px-2 z-[60]">
+<div class="mb-8 px-4">
+<h1 class="font-headline-lg text-headline-lg text-primary tracking-tight">数智嘹望系统</h1>
+<p class="text-on-surface-variant text-sm opacity-70">管理控制台</p>
+</div>
+<div class="flex-1 space-y-1 overflow-y-auto pr-1">
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:bg-surface-variant hover:text-on-surface transition-all duration-200 active:translate-y-[2px]" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+<span class="font-title-md text-title-md">Dashboard</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:bg-surface-variant hover:text-on-surface transition-all duration-200 active:translate-y-[2px]" href="#">
+<span class="material-symbols-outlined">person</span>
+<span class="font-title-md text-title-md">User</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:bg-surface-variant hover:text-on-surface transition-all duration-200 active:translate-y-[2px]" href="#">
+<span class="material-symbols-outlined">input</span>
+<span class="font-title-md text-title-md">Collection</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:bg-surface-variant hover:text-on-surface transition-all duration-200 active:translate-y-[2px]" href="#">
+<span class="material-symbols-outlined">cleaning_services</span>
+<span class="font-title-md text-title-md">Cleaning</span>
+</a>
+<!-- Active Tab: Storage -->
+<a class="flex items-center gap-3 px-4 py-3 bg-primary-container text-on-primary-container border-r-4 border-secondary-fixed shadow-[0_0_8px_rgba(58,134,255,0.4)] transition-all duration-200 active:translate-y-[2px]" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">database</span>
+<span class="font-title-md text-title-md">Storage</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:bg-surface-variant hover:text-on-surface transition-all duration-200 active:translate-y-[2px]" href="#">
+<span class="material-symbols-outlined">psychology</span>
+<span class="font-title-md text-title-md">AI Inquiry</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:bg-surface-variant hover:text-on-surface transition-all duration-200 active:translate-y-[2px]" href="#">
+<span class="material-symbols-outlined">smart_toy</span>
+<span class="font-title-md text-title-md">Digital Staff</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:bg-surface-variant hover:text-on-surface transition-all duration-200 active:translate-y-[2px]" href="#">
+<span class="material-symbols-outlined">bolt</span>
+<span class="font-title-md text-title-md">Skill</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:bg-surface-variant hover:text-on-surface transition-all duration-200 active:translate-y-[2px]" href="#">
+<span class="material-symbols-outlined">deployed_code</span>
+<span class="font-title-md text-title-md">Model</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:bg-surface-variant hover:text-on-surface transition-all duration-200 active:translate-y-[2px]" href="#">
+<span class="material-symbols-outlined">monitoring</span>
+<span class="font-title-md text-title-md">Big Data Screen</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:bg-surface-variant hover:text-on-surface transition-all duration-200 active:translate-y-[2px]" href="#">
+<span class="material-symbols-outlined">fact_check</span>
+<span class="font-title-md text-title-md">Audit</span>
+</a>
+</div>
+<div class="mt-auto px-4 pt-4 border-t border-outline-variant/30">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-none border-2 border-primary overflow-hidden">
+<img alt="Admin Avatar" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB2AbB6zIsrCrzcHuJc5aw1OpBNKPbgxYwqycLfuSP1Et0GokSED0vgSDhbpWM5J53M0JwyNQgovnnJtPGLbg1g-hPMLYHstYIU_ZaN8cUE1x7dbW2of3NY7XxRCPohf-EFA9wZmXn9epJlpsDmlbFl-vgQIkEzhhe6ynux0HfaJR59b4IeqqOWGYB1w4rNHzTrMMmh5O7sEKE43zHVDoS4mM15xu4WqWyXaIELlPBz3RQ8pHGdPi1zXf-FFKkwjbyblpgfRFA-wOsK"/>
+</div>
+<div class="flex-1">
+<p class="font-label-pixel text-on-surface leading-none">ROOT_ADMIN</p>
+<p class="text-[10px] text-primary mt-1">LV.99 ARCHITECT</p>
+</div>
+</div>
+</div>
+</nav>
+<!-- Top Navigation Shell -->
+<header class="fixed top-0 right-0 w-[calc(100%-260px)] h-16 bg-surface/80 backdrop-blur-md border-b-2 border-outline-variant flex justify-between items-center px-container-margin z-50">
+<div class="flex items-center gap-4 bg-surface-variant/50 px-4 py-1 border border-outline-variant">
+<span class="material-symbols-outlined text-primary">search</span>
+<input class="bg-transparent border-none focus:ring-0 text-sm w-64 placeholder:text-on-surface-variant/50 font-body-lg" placeholder="搜索存储任务..." type="text"/>
+</div>
+<div class="flex items-center gap-6">
+<button class="relative text-on-surface-variant hover:text-primary transition-colors">
+<span class="material-symbols-outlined">notifications</span>
+<span class="absolute -top-1 -right-1 w-2 h-2 bg-secondary-fixed rounded-none animate-pulse"></span>
+</button>
+<button class="text-on-surface-variant hover:text-primary transition-colors">
+<span class="material-symbols-outlined">settings</span>
+</button>
+<button class="pixel-button bg-primary text-on-primary font-label-pixel px-4 py-1.5 flex items-center gap-2">
+                LOGOUT <span class="material-symbols-outlined text-sm">logout</span>
+</button>
+</div>
+</header>
+<!-- Main Content -->
+<main class="ml-[260px] pt-24 px-container-margin h-screen overflow-y-auto pb-12 bg-surface-dim">
+<!-- Breadcrumb / Header -->
+<div class="mb-8">
+<div class="flex items-center gap-2 text-primary font-label-pixel text-sm mb-2">
+<span>SYSTEM</span>
+<span class="material-symbols-outlined text-xs">chevron_right</span>
+<span>DATA_VAULT</span>
+<span class="material-symbols-outlined text-xs">chevron_right</span>
+<span class="text-secondary-fixed-dim">STORAGE_MANAGEMENT</span>
+</div>
+<h2 class="font-display-lg text-display-lg text-on-surface">数据存储中心 <span class="text-primary font-label-pixel text-lg ml-4">[STATUS: ONLINE]</span></h2>
+</div>
+<!-- Bento Grid Layout -->
+<div class="grid grid-cols-12 gap-6">
+<!-- Storage Management Stats -->
+<div class="col-span-12 md:col-span-8 grid grid-cols-3 gap-4">
+<div class="pixel-card pixel-header-strip-blue p-card-padding">
+<p class="text-on-surface-variant font-label-pixel text-xs mb-2">已用存储总量</p>
+<div class="flex items-baseline gap-2">
+<span class="font-display-lg text-4xl text-primary">12.4</span>
+<span class="font-label-pixel text-lg text-on-surface-variant">PB</span>
+</div>
+<div class="w-full bg-surface-variant h-1 mt-4">
+<div class="bg-primary h-full" style="width: 72%"></div>
+</div>
+<p class="text-[10px] text-on-surface-variant mt-2 font-label-pixel">USAGE: 72.4% / LIMIT: 18.0 PB</p>
+</div>
+<div class="pixel-card pixel-header-strip-purple p-card-padding">
+<p class="text-on-surface-variant font-label-pixel text-xs mb-2">今日入库增量</p>
+<div class="flex items-baseline gap-2">
+<span class="font-display-lg text-4xl text-tertiary">428</span>
+<span class="font-label-pixel text-lg text-on-surface-variant">GB</span>
+</div>
+<p class="text-secondary-fixed-dim text-xs mt-4 font-label-pixel flex items-center gap-1">
+<span class="material-symbols-outlined text-xs">trending_up</span> +14.2% FROM YESTERDAY
+                    </p>
+</div>
+<div class="pixel-card pixel-header-strip-green p-card-padding">
+<p class="text-on-surface-variant font-label-pixel text-xs mb-2">当前并发同步数</p>
+<div class="flex items-baseline gap-2">
+<span class="font-display-lg text-4xl text-secondary-fixed-dim">24</span>
+<span class="font-label-pixel text-lg text-on-surface-variant">TASKS</span>
+</div>
+<p class="text-on-surface-variant text-xs mt-4 font-label-pixel flex items-center gap-1">
+<span class="material-symbols-outlined text-xs">sync</span> SYSTEM LOAD: NORMAL
+                    </p>
+</div>
+</div>
+<!-- Table Structure Preview (Side Card) -->
+<div class="col-span-12 md:col-span-4 row-span-2">
+<div class="pixel-card h-full flex flex-col">
+<div class="p-4 border-b border-outline-variant bg-surface-variant/30 flex justify-between items-center">
+<h3 class="font-title-md text-title-md flex items-center gap-2">
+<span class="material-symbols-outlined text-primary">schema</span> 数据仓库结构
+                        </h3>
+<span class="text-[10px] font-label-pixel text-on-surface-variant">LATEST: 09:41</span>
+</div>
+<div class="p-4 flex-1 overflow-y-auto space-y-6">
+<div>
+<p class="font-label-pixel text-secondary-fixed-dim text-xs mb-2"># ODS_ENTITY_DATA (原始层)</p>
+<ul class="space-y-1 text-sm font-body-sm text-on-surface-variant border-l-2 border-outline-variant/30 pl-3">
+<li class="flex justify-between"><span>row_id</span> <span class="font-label-pixel text-[10px]">UUID</span></li>
+<li class="flex justify-between"><span>raw_payload</span> <span class="font-label-pixel text-[10px]">JSONB</span></li>
+<li class="flex justify-between"><span>source_tag</span> <span class="font-label-pixel text-[10px]">VARCHAR(64)</span></li>
+<li class="flex justify-between"><span>ingest_ts</span> <span class="font-label-pixel text-[10px]">TIMESTAMP</span></li>
+</ul>
+</div>
+<div>
+<p class="font-label-pixel text-tertiary text-xs mb-2"># DWD_CAMPUS_BEHAVIOR (明细层)</p>
+<ul class="space-y-1 text-sm font-body-sm text-on-surface-variant border-l-2 border-outline-variant/30 pl-3">
+<li class="flex justify-between"><span>student_id</span> <span class="font-label-pixel text-[10px]">INT8</span></li>
+<li class="flex justify-between"><span>action_type</span> <span class="font-label-pixel text-[10px]">INT2</span></li>
+<li class="flex justify-between"><span>location_id</span> <span class="font-label-pixel text-[10px]">VARCHAR(32)</span></li>
+<li class="flex justify-between"><span>duration</span> <span class="font-label-pixel text-[10px]">INTERVAL</span></li>
+</ul>
+</div>
+<div>
+<p class="font-label-pixel text-primary text-xs mb-2"># ADS_SMART_ANALYTICS (应用层)</p>
+<ul class="space-y-1 text-sm font-body-sm text-on-surface-variant border-l-2 border-outline-variant/30 pl-3">
+<li class="flex justify-between"><span>report_date</span> <span class="font-label-pixel text-[10px]">DATE</span></li>
+<li class="flex justify-between"><span>kpi_score</span> <span class="font-label-pixel text-[10px]">NUMERIC(5,2)</span></li>
+<li class="flex justify-between"><span>pred_label</span> <span class="font-label-pixel text-[10px]">INT4</span></li>
+</ul>
+</div>
+</div>
+<div class="p-4 bg-surface-variant/10">
+<button class="w-full py-2 bg-surface-variant hover:bg-outline-variant text-on-surface font-label-pixel text-xs transition-colors">
+                            查看完整字典 DATA_DICT.PDF
+                        </button>
+</div>
+</div>
+</div>
+<!-- Sync Records List -->
+<div class="col-span-12 md:col-span-8">
+<div class="pixel-card">
+<div class="p-4 border-b border-outline-variant bg-surface-variant/30 flex justify-between items-center">
+<h3 class="font-title-md text-title-md flex items-center gap-2">
+<span class="material-symbols-outlined text-secondary-fixed-dim">history</span> 数据同步记录
+                        </h3>
+<div class="flex gap-2">
+<button class="p-1 hover:bg-surface-variant transition-colors"><span class="material-symbols-outlined text-sm">refresh</span></button>
+<button class="p-1 hover:bg-surface-variant transition-colors"><span class="material-symbols-outlined text-sm">filter_list</span></button>
+</div>
+</div>
+<div class="overflow-x-auto">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="bg-surface-container-high border-b border-outline-variant">
+<th class="p-4 font-label-pixel text-xs text-on-surface-variant uppercase tracking-wider">任务名称</th>
+<th class="p-4 font-label-pixel text-xs text-on-surface-variant uppercase tracking-wider">同步时间</th>
+<th class="p-4 font-label-pixel text-xs text-on-surface-variant uppercase tracking-wider text-right">数据量</th>
+<th class="p-4 font-label-pixel text-xs text-on-surface-variant uppercase tracking-wider text-center">状态</th>
+<th class="p-4 font-label-pixel text-xs text-on-surface-variant uppercase tracking-wider text-right">操作</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-outline-variant/30">
+<tr class="hover:bg-primary/5 transition-colors group">
+<td class="p-4">
+<div class="flex flex-col">
+<span class="font-bold text-on-surface">学籍数据批量全量导入</span>
+<span class="text-[10px] text-on-surface-variant font-label-pixel">TASK_ID: 0x8A2C</span>
+</div>
+</td>
+<td class="p-4 text-sm text-on-surface-variant">2023-11-24 14:20:11</td>
+<td class="p-4 text-right text-on-surface font-label-pixel">1,240,512 <span class="text-[10px] text-on-surface-variant">ROWS</span></td>
+<td class="p-4 text-center">
+<span class="status-chip bg-secondary-fixed/20 text-secondary-fixed border border-secondary-fixed/50">COMPLETED</span>
+</td>
+<td class="p-4 text-right">
+<button class="text-primary hover:underline text-xs font-label-pixel">LOGS</button>
+</td>
+</tr>
+<tr class="hover:bg-primary/5 transition-colors group">
+<td class="p-4">
+<div class="flex flex-col">
+<span class="font-bold text-on-surface">图书馆门禁实时流接入</span>
+<span class="text-[10px] text-on-surface-variant font-label-pixel">TASK_ID: 0x9F41</span>
+</div>
+</td>
+<td class="p-4 text-sm text-on-surface-variant">2023-11-24 15:45:00</td>
+<td class="p-4 text-right text-on-surface font-label-pixel">842 <span class="text-[10px] text-on-surface-variant">OPS/S</span></td>
+<td class="p-4 text-center">
+<span class="status-chip bg-primary-container/20 text-primary border border-primary/50 animate-pulse">RUNNING</span>
+</td>
+<td class="p-4 text-right">
+<button class="text-primary hover:underline text-xs font-label-pixel">STOP</button>
+</td>
+</tr>
+<tr class="hover:bg-primary/5 transition-colors group">
+<td class="p-4">
+<div class="flex flex-col">
+<span class="font-bold text-on-surface">一卡通支付日志归档</span>
+<span class="text-[10px] text-on-surface-variant font-label-pixel">TASK_ID: 0x4D11</span>
+</div>
+</td>
+<td class="p-4 text-sm text-on-surface-variant">2023-11-24 12:00:05</td>
+<td class="p-4 text-right text-on-surface font-label-pixel">56.4 <span class="text-[10px] text-on-surface-variant">GB</span></td>
+<td class="p-4 text-center">
+<span class="status-chip bg-error/20 text-error border border-error/50">FAILED</span>
+</td>
+<td class="p-4 text-right">
+<button class="text-primary hover:underline text-xs font-label-pixel">RETRY</button>
+</td>
+</tr>
+<tr class="hover:bg-primary/5 transition-colors group">
+<td class="p-4">
+<div class="flex flex-col">
+<span class="font-bold text-on-surface">教务排课系统增量同步</span>
+<span class="text-[10px] text-on-surface-variant font-label-pixel">TASK_ID: 0xB502</span>
+</div>
+</td>
+<td class="p-4 text-sm text-on-surface-variant">2023-11-24 10:30:44</td>
+<td class="p-4 text-right text-on-surface font-label-pixel">4,210 <span class="text-[10px] text-on-surface-variant">ROWS</span></td>
+<td class="p-4 text-center">
+<span class="status-chip bg-secondary-fixed/20 text-secondary-fixed border border-secondary-fixed/50">COMPLETED</span>
+</td>
+<td class="p-4 text-right">
+<button class="text-primary hover:underline text-xs font-label-pixel">LOGS</button>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="p-4 bg-surface-container-high/50 flex justify-between items-center border-t border-outline-variant">
+<span class="text-[10px] font-label-pixel text-on-surface-variant">SHOWING 1-4 OF 128 ENTRIES</span>
+<div class="flex gap-1">
+<button class="w-8 h-8 flex items-center justify-center bg-surface-variant hover:bg-outline-variant border border-outline-variant"><span class="material-symbols-outlined text-sm">chevron_left</span></button>
+<button class="w-8 h-8 flex items-center justify-center bg-primary text-on-primary font-label-pixel border border-primary">1</button>
+<button class="w-8 h-8 flex items-center justify-center bg-surface-variant hover:bg-outline-variant border border-outline-variant font-label-pixel">2</button>
+<button class="w-8 h-8 flex items-center justify-center bg-surface-variant hover:bg-outline-variant border border-outline-variant"><span class="material-symbols-outlined text-sm">chevron_right</span></button>
+</div>
+</div>
+</div>
+</div>
+<!-- Database Nodes Visualizer -->
+<div class="col-span-12">
+<div class="pixel-card p-6 flex flex-col gap-6 overflow-hidden">
+<div class="flex justify-between items-center">
+<h3 class="font-title-md text-title-md flex items-center gap-2">
+<span class="material-symbols-outlined text-tertiary">hub</span> 存储集群节点状态
+                        </h3>
+<div class="flex gap-4">
+<div class="flex items-center gap-2"><span class="w-2 h-2 bg-secondary-fixed"></span> <span class="text-xs font-label-pixel">HEALTHY</span></div>
+<div class="flex items-center gap-2"><span class="w-2 h-2 bg-error"></span> <span class="text-xs font-label-pixel">ERROR</span></div>
+</div>
+</div>
+<div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-8 gap-4">
+<!-- Node 1 -->
+<div class="bg-surface-container-high border-2 border-secondary-fixed p-3 flex flex-col items-center gap-2 relative group cursor-pointer hover:bg-secondary-fixed/10">
+<span class="material-symbols-outlined text-secondary-fixed text-3xl">storage</span>
+<span class="font-label-pixel text-[10px]">NODE_01</span>
+<div class="absolute inset-0 bg-secondary-fixed/5 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+<span class="text-[8px] font-bold text-secondary-fixed">DETAILS</span>
+</div>
+</div>
+<!-- Node 2 -->
+<div class="bg-surface-container-high border-2 border-secondary-fixed p-3 flex flex-col items-center gap-2 relative">
+<span class="material-symbols-outlined text-secondary-fixed text-3xl">storage</span>
+<span class="font-label-pixel text-[10px]">NODE_02</span>
+</div>
+<!-- Node 3 -->
+<div class="bg-surface-container-high border-2 border-error p-3 flex flex-col items-center gap-2 relative">
+<span class="material-symbols-outlined text-error text-3xl animate-pulse">report</span>
+<span class="font-label-pixel text-[10px] text-error">NODE_03</span>
+</div>
+<!-- Nodes 4-8 -->
+<div class="bg-surface-container-high border-2 border-secondary-fixed/30 p-3 flex flex-col items-center gap-2">
+<span class="material-symbols-outlined text-on-surface-variant/40 text-3xl">storage</span>
+<span class="font-label-pixel text-[10px] text-on-surface-variant/40">NODE_04</span>
+</div>
+<div class="bg-surface-container-high border-2 border-secondary-fixed p-3 flex flex-col items-center gap-2 relative">
+<span class="material-symbols-outlined text-secondary-fixed text-3xl">storage</span>
+<span class="font-label-pixel text-[10px]">NODE_05</span>
+</div>
+<div class="bg-surface-container-high border-2 border-secondary-fixed p-3 flex flex-col items-center gap-2 relative">
+<span class="material-symbols-outlined text-secondary-fixed text-3xl">storage</span>
+<span class="font-label-pixel text-[10px]">NODE_06</span>
+</div>
+<div class="bg-surface-container-high border-2 border-secondary-fixed p-3 flex flex-col items-center gap-2 relative">
+<span class="material-symbols-outlined text-secondary-fixed text-3xl">storage</span>
+<span class="font-label-pixel text-[10px]">NODE_07</span>
+</div>
+<div class="bg-surface-container-high border-2 border-outline-variant p-3 flex flex-col items-center gap-2 relative opacity-50">
+<span class="material-symbols-outlined text-on-surface-variant text-3xl">add_circle</span>
+<span class="font-label-pixel text-[10px]">NEW_NODE</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- Contextual FAB (Only on main dashboard or primary screens) -->
+<button class="fixed bottom-8 right-8 w-14 h-14 bg-secondary-fixed text-on-secondary flex items-center justify-center shadow-[0_0_20px_rgba(38,254,220,0.5)] border-b-4 border-on-secondary-fixed-variant active:translate-y-1 active:border-b-0 transition-all hover:scale-110 z-50">
+<span class="material-symbols-outlined text-2xl" style="font-variation-settings: 'FILL' 1;">add</span>
+</button>
+<script>
+        // Simple micro-interaction for storage bars and random numbers
+        document.addEventListener('DOMContentLoaded', () => {
+            const bars = document.querySelectorAll('.bg-primary.h-full');
+            bars.forEach(bar => {
+                const targetWidth = bar.style.width;
+                bar.style.width = '0%';
+                setTimeout(() => {
+                    bar.style.transition = 'width 1s cubic-bezier(0.19, 1, 0.22, 1)';
+                    bar.style.width = targetWidth;
+                }, 300);
+            });
+
+            // Randomly flash node 03 error state
+            const errorNode = document.querySelector('.border-error');
+            setInterval(() => {
+                errorNode.style.borderColor = (errorNode.style.borderColor === 'rgb(255, 180, 171)') ? '#690005' : '#ffb4ab';
+            }, 800);
+        });
+    </script>
+</body></html>

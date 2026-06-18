@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="zh-CN"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>XNU 数智枢纽 - 资源中心</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;600;700;800&amp;family=JetBrains+Mono:wght@400;500;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        body {
+            background-color: #0a0a0c;
+            color: #e3e2e2;
+            -webkit-font-smoothing: antialiased;
+        }
+        .glass-card {
+            background: rgba(26, 26, 30, 0.7);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(0, 219, 231, 0.1);
+            position: relative;
+        }
+        .glass-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            border-radius: 12px;
+            padding: 1px;
+            background: linear-gradient(135deg, rgba(0, 219, 231, 0.3) 0%, transparent 40%, transparent 60%, rgba(0, 219, 231, 0.05) 100%);
+            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor;
+            mask-composite: exclude;
+            pointer-events: none;
+        }
+        .neon-glow-hover:hover {
+            box-shadow: 0px 4px 25px rgba(0, 219, 231, 0.2);
+            border-color: rgba(0, 219, 231, 0.4);
+            transform: translateY(-2px);
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        @keyframes scanline {
+            0% { transform: translateY(-100%); }
+            100% { transform: translateY(100%); }
+        }
+        .scanline-effect {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to bottom, transparent, rgba(0, 219, 231, 0.03), transparent);
+            height: 20%;
+            width: 100%;
+            animation: scanline 6s linear infinite;
+            pointer-events: none;
+        }
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #0a0a0c;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #1f2020;
+            border-radius: 3px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #343535;
+        }
+    </style>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "primary": "#e1fdff",
+                    "primary-fixed-dim": "#00dbe7",
+                    "secondary": "#d7ffc5",
+                    "secondary-fixed": "#79ff5b",
+                    "background": "#121414",
+                    "surface": "#121414",
+                    "surface-container": "#1f2020",
+                    "on-surface": "#e3e2e2",
+                    "on-surface-variant": "#b9cacb",
+                    "outline": "#849495",
+                    "outline-variant": "#3a494b"
+            },
+            "spacing": {
+                    "margin-desktop": "40px",
+                    "gutter": "24px"
+            },
+            "fontFamily": {
+                    "label-tech": ["JetBrains Mono"],
+                    "headline-sm": ["Hanken Grotesk"],
+                    "headline-md": ["Hanken Grotesk"],
+                    "headline-lg": ["Hanken Grotesk"],
+                    "body-md": ["Hanken Grotesk"],
+                    "label-code": ["JetBrains Mono"],
+                    "body-lg": ["Hanken Grotesk"]
+            }
+          },
+        },
+      }
+    </script>
+</head>
+<body class="flex h-screen overflow-hidden bg-background">
+<!-- 侧边导航栏 -->
+<aside class="w-20 lg:w-64 flex flex-col border-r border-outline-variant/30 bg-surface-container/50 backdrop-blur-xl z-50">
+<div class="h-16 flex items-center px-6 border-b border-outline-variant/20">
+<div class="w-8 h-8 bg-primary-fixed-dim shadow-[0_0_15px_#00dbe7] rounded flex items-center justify-center mr-3 hidden lg:flex">
+<span class="material-symbols-outlined text-background font-bold">hub</span>
+</div>
+<span class="font-headline-sm text-primary-fixed-dim font-bold tracking-tight hidden lg:block">XNU 数智枢纽</span>
+<span class="material-symbols-outlined text-primary-fixed-dim lg:hidden mx-auto">hub</span>
+</div>
+<nav class="flex-1 py-6 px-3 flex flex-col gap-2">
+<a class="flex items-center gap-3 px-3 py-3 rounded-lg text-on-surface-variant hover:bg-primary/5 hover:text-primary transition-all group" href="#">
+<span class="material-symbols-outlined">home</span>
+<span class="font-body-md hidden lg:block">控制台首页</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-3 rounded-lg bg-primary/10 text-primary-fixed-dim border border-primary/20 transition-all group" href="#">
+<span class="material-symbols-outlined">smart_toy</span>
+<span class="font-body-md hidden lg:block">数智员工库</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-3 rounded-lg text-on-surface-variant hover:bg-primary/5 hover:text-primary transition-all group" href="#">
+<span class="material-symbols-outlined">database</span>
+<span class="font-body-md hidden lg:block">智能问数</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-3 rounded-lg text-on-surface-variant hover:bg-primary/5 hover:text-primary transition-all group" href="#">
+<span class="material-symbols-outlined">insights</span>
+<span class="font-body-md hidden lg:block">性能分析</span>
+</a>
+<div class="mt-auto">
+<a class="flex items-center gap-3 px-3 py-3 rounded-lg text-on-surface-variant hover:bg-primary/5 hover:text-primary transition-all group" href="#">
+<span class="material-symbols-outlined">person</span>
+<span class="font-body-md hidden lg:block">个人中心</span>
+</a>
+</div>
+</nav>
+</aside>
+<!-- 主要内容区域 -->
+<main class="flex-1 flex flex-col overflow-hidden relative">
+<!-- 背景装饰 -->
+<div class="fixed inset-0 pointer-events-none z-0">
+<div class="absolute top-[-10%] right-[-10%] w-[40%] h-[40%] bg-primary/5 blur-[120px] rounded-full"></div>
+<div class="absolute bottom-[-10%] left-[-10%] w-[30%] h-[30%] bg-secondary/5 blur-[100px] rounded-full"></div>
+</div>
+<!-- 顶部工具栏 (搜索、筛选、排序) -->
+<header class="h-20 flex items-center justify-between px-margin-desktop border-b border-outline-variant/20 bg-surface/30 backdrop-blur-md z-10">
+<div class="flex items-center gap-6 flex-1 max-w-4xl">
+<div class="relative flex-1">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant/60">search</span>
+<input class="w-full bg-surface-container border border-outline-variant/30 rounded-lg py-2 pl-10 pr-4 focus:outline-none focus:border-primary-fixed-dim text-body-md placeholder:text-on-surface-variant/40 transition-all" placeholder="搜索数智员工、编号或职能..." type="text"/>
+</div>
+<div class="flex items-center gap-2">
+<button class="flex items-center gap-2 px-4 py-2 bg-surface-container border border-outline-variant/30 rounded-lg hover:bg-surface-container-high transition-colors">
+<span class="material-symbols-outlined text-[20px]">filter_list</span>
+<span class="text-body-md">所有类别</span>
+<span class="material-symbols-outlined text-[16px]">expand_more</span>
+</button>
+<button class="flex items-center gap-2 px-4 py-2 bg-surface-container border border-outline-variant/30 rounded-lg hover:bg-surface-container-high transition-colors">
+<span class="material-symbols-outlined text-[20px]">sort</span>
+<span class="text-body-md">排序: 活跃度</span>
+</button>
+</div>
+</div>
+<div class="flex items-center gap-4 ml-6">
+<div class="flex items-center gap-2 px-3 py-1.5 bg-secondary-fixed/10 border border-secondary-fixed/20 rounded-full">
+<div class="w-2 h-2 bg-secondary-fixed rounded-full animate-pulse shadow-[0_0_8px_#2ae500]"></div>
+<span class="text-[12px] font-label-code text-secondary-fixed">系统同步中</span>
+</div>
+<button class="material-symbols-outlined p-2 text-on-surface-variant hover:text-primary transition-colors">notifications</button>
+</div>
+</header>
+<!-- 内容滚动区域 -->
+<div class="flex-1 overflow-y-auto p-margin-desktop z-10">
+<div class="max-w-[1600px] mx-auto">
+<!-- 页面标题 -->
+<div class="mb-10">
+<div class="flex items-center gap-3 mb-2">
+<div class="w-1.5 h-6 bg-primary-fixed-dim rounded-full shadow-[0_0_10px_#00dbe7]"></div>
+<h1 class="font-headline-lg text-primary tracking-tight">数智资源中心</h1>
+</div>
+<p class="font-body-lg text-on-surface-variant opacity-80">当前共有 124 个活跃数智节点，支持校园全场景业务处理。</p>
+</div>
+<!-- 紧凑网格布局 (每行 4-5 个) -->
+<div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6">
+<!-- 学术助手 -->
+<div class="glass-card rounded-xl p-5 flex flex-col transition-all duration-300 neon-glow-hover cursor-pointer group">
+<div class="scanline-effect"></div>
+<div class="flex items-start justify-between mb-4">
+<div class="w-14 h-14 bg-surface-container rounded-lg border border-primary/20 flex items-center justify-center overflow-hidden relative">
+<img alt="学术助手" class="w-10 h-10 pixelated" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDFxDv_aQipHd3g_cXA61cYyE8cvaCdaWnj2dIiV8VxGZFHkjVex6KAx8hpP7pqzwu2m2aPBuVL0qDQO73Oj4BsfoPjTwwyG8UzJ97UM5g4rgbJrs8YzSBTWXGdFgy5lx5TVvqdFvyICjA_lW-AIwb3UFt3SprySC3lvUk6mHHmqAzAE1JDn48OZGqWUQoya9XKA6nx5J1ECfTsCj26tLgcpMq6IypxWbd9pGKtZhRVgaBXEjUYAzz-UcA_zcMm9cFaNqqG2tFNr9uH"/>
+<div class="absolute bottom-0 right-0 w-2.5 h-2.5 bg-secondary-fixed rounded-full border-2 border-surface shadow-[0_0_5px_#2ae500]"></div>
+</div>
+<span class="material-symbols-outlined text-primary/30 group-hover:text-primary transition-colors text-[20px]">open_in_new</span>
+</div>
+<span class="font-label-code text-[10px] text-primary-fixed-dim/60 uppercase tracking-widest mb-1">XNU-学术-01</span>
+<h2 class="font-headline-sm text-primary mb-2">学术助手</h2>
+<p class="font-body-md text-on-surface-variant leading-relaxed text-sm line-clamp-2">用于课程映射和研究引用数据的神经接口，支持跨库检索。</p>
+<div class="mt-4 pt-4 border-t border-outline-variant/10 flex items-center justify-between">
+<span class="text-[10px] px-2 py-0.5 bg-primary/5 text-primary/60 rounded">核心智脑</span>
+<span class="text-[10px] font-label-code text-on-surface-variant/50">活跃度: 98%</span>
+</div>
+</div>
+<!-- 人事分析师 -->
+<div class="glass-card rounded-xl p-5 flex flex-col transition-all duration-300 neon-glow-hover cursor-pointer group">
+<div class="scanline-effect"></div>
+<div class="flex items-start justify-between mb-4">
+<div class="w-14 h-14 bg-surface-container rounded-lg border border-primary/20 flex items-center justify-center overflow-hidden relative">
+<img alt="人事分析师" class="w-10 h-10 pixelated" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA5fpms0Wb963lzzPZMXAO8myQM5bd6jcvuF9fKzz96qsqIkSmiRTcpiUHNYmam8SAwmmz8EYsOx6sv1Tssx3Bdu84NsNgK-fHLG56s9awlNq6Qap1vvPQPu3uIH0IwbU_W23poTfXKHbIlit1AlF6xjOQeauj3lpykuyIgzgD3s0ntqvHp30zd7m43djt26LIB4AuaX0h_RZRCUUKkK0wLK-whGexMbxkBwtgkgv9JCFzU5XoozEZBSmySq3Ixt93XkxuanpOQPIOR"/>
+<div class="absolute bottom-0 right-0 w-2.5 h-2.5 bg-secondary-fixed rounded-full border-2 border-surface shadow-[0_0_5px_#2ae500]"></div>
+</div>
+<span class="material-symbols-outlined text-primary/30 group-hover:text-primary transition-colors text-[20px]">open_in_new</span>
+</div>
+<span class="font-label-code text-[10px] text-primary-fixed-dim/60 uppercase tracking-widest mb-1">XNU-人事-42</span>
+<h2 class="font-headline-sm text-primary mb-2">人事分析师</h2>
+<p class="font-body-md text-on-surface-variant leading-relaxed text-sm line-clamp-2">优化人力资本分配，处理人才流向诊断与效能评估。</p>
+<div class="mt-4 pt-4 border-t border-outline-variant/10 flex items-center justify-between">
+<span class="text-[10px] px-2 py-0.5 bg-primary/5 text-primary/60 rounded">管理枢纽</span>
+<span class="text-[10px] font-label-code text-on-surface-variant/50">活跃度: 85%</span>
+</div>
+</div>
+<!-- 系统架构师 -->
+<div class="glass-card rounded-xl p-5 flex flex-col transition-all duration-300 neon-glow-hover cursor-pointer group">
+<div class="scanline-effect"></div>
+<div class="flex items-start justify-between mb-4">
+<div class="w-14 h-14 bg-surface-container rounded-lg border border-primary/20 flex items-center justify-center overflow-hidden relative">
+<img alt="系统架构师" class="w-10 h-10 pixelated" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBFcu37LQ4Awu_gJvI7Ti-TpEBsr5z7F6zr5iS2MdobxPQX8zALeTSFrl7SX8jharT964fOdSbpeys4APl2p8t4OtxYqNFX0ZqChi1hYjaoVjll6juaf1hHE4y1Tc0-_4PnJEE4aKbPod5siIrtLPXSKRaItTTVwkPQEV7zhD35GN7A9bVRCdUkzpIZW0XuIr6RFV2ivTWldAw-pEeu1RqpUmhGfZgmRZ5FfGUDR-BrA35TLCq2tw_9CGfG0BmXcyTMakEFtAEp1N6D"/>
+<div class="absolute bottom-0 right-0 w-2.5 h-2.5 bg-secondary-fixed rounded-full border-2 border-surface shadow-[0_0_5px_#2ae500]"></div>
+</div>
+<span class="material-symbols-outlined text-primary/30 group-hover:text-primary transition-colors text-[20px]">open_in_new</span>
+</div>
+<span class="font-label-code text-[10px] text-primary-fixed-dim/60 uppercase tracking-widest mb-1">XNU-系统-09</span>
+<h2 class="font-headline-sm text-primary mb-2">系统架构师</h2>
+<p class="font-body-md text-on-surface-variant leading-relaxed text-sm line-clamp-2">主机结构完整性维护与校园网络节点编排优化。</p>
+<div class="mt-4 pt-4 border-t border-outline-variant/10 flex items-center justify-between">
+<span class="text-[10px] px-2 py-0.5 bg-primary/5 text-primary/60 rounded">底层架构</span>
+<span class="text-[10px] font-label-code text-on-surface-variant/50">活跃度: 100%</span>
+</div>
+</div>
+<!-- 后勤单元 -->
+<div class="glass-card rounded-xl p-5 flex flex-col transition-all duration-300 neon-glow-hover cursor-pointer group">
+<div class="scanline-effect"></div>
+<div class="flex items-start justify-between mb-4">
+<div class="w-14 h-14 bg-surface-container rounded-lg border border-primary/20 flex items-center justify-center overflow-hidden relative">
+<img alt="后勤单元" class="w-10 h-10 pixelated" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD4DtPugPQ9Vw_yUUftTIBfCn6eMT5487rPxBZ1VkIUlaUga5isiWI_sWk5ShbvNYviRR-F-8QUbAMeRlsWfcf-CU4j_4-gqA3iHeaxRSv3q1cLbF0rANI3fRWl_ml5rX2332aTYAkyTQAPwBJw0xsRFwKSG7qtCYlTLbF4g217M0RR7OwTbpSE-kmk46_a-RqvP-brUj7_0Xm81IRQ0UdY4Hylrn6Lmh5gAKo82UJsCu62_QCTN83NTWAXQHQzr5JkZ6KOGoHrHhZM"/>
+<div class="absolute bottom-0 right-0 w-2.5 h-2.5 bg-outline rounded-full border-2 border-surface"></div>
+</div>
+<span class="material-symbols-outlined text-primary/30 group-hover:text-primary transition-colors text-[20px]">open_in_new</span>
+</div>
+<span class="font-label-code text-[10px] text-primary-fixed-dim/60 uppercase tracking-widest mb-1">XNU-后勤-11</span>
+<h2 class="font-headline-sm text-primary mb-2">后勤单元</h2>
+<p class="font-body-md text-on-surface-variant leading-relaxed text-sm line-clamp-2">自动化供应链管理，执行实物资产实时追踪。当前处于待命状态。</p>
+<div class="mt-4 pt-4 border-t border-outline-variant/10 flex items-center justify-between">
+<span class="text-[10px] px-2 py-0.5 bg-primary/5 text-primary/60 rounded">后勤支撑</span>
+<span class="text-[10px] font-label-code text-on-surface-variant/50">状态: 待命</span>
+</div>
+</div>
+<!-- 数字馆员 -->
+<div class="glass-card rounded-xl p-5 flex flex-col transition-all duration-300 neon-glow-hover cursor-pointer group">
+<div class="scanline-effect"></div>
+<div class="flex items-start justify-between mb-4">
+<div class="w-14 h-14 bg-surface-container rounded-lg border border-primary/20 flex items-center justify-center overflow-hidden relative">
+<img alt="数字馆员" class="w-10 h-10 pixelated" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBBDepXP-FpFqkmfNfrYgx9Mmloaf_Iv6lX8POFo7CHB4m2W4YE-Cnd1iE4WwFR_vuWY9F0GCIrr-IRm9_6bWs_u82lExwYNqt1rxEeuneAg5Y0mb5xe4cQVck85z36EEiyPWClvyRjtsDsB_u3qqmexSVP8ek6Lt-6zBbU4p67KAvAiTOT5UY8RCj04BGxRayCHVjuoyPd9VhjUkM3LlFc38bvuiIir9sX_BvEJRk261dNApH_mcZuflNMVSjSlufQ0BXOzWEMfObt"/>
+<div class="absolute bottom-0 right-0 w-2.5 h-2.5 bg-secondary-fixed rounded-full border-2 border-surface shadow-[0_0_5px_#2ae500]"></div>
+</div>
+<span class="material-symbols-outlined text-primary/30 group-hover:text-primary transition-colors text-[20px]">open_in_new</span>
+</div>
+<span class="font-label-code text-[10px] text-primary-fixed-dim/60 uppercase tracking-widest mb-1">XNU-图书-88</span>
+<h2 class="font-headline-sm text-primary mb-2">数字馆员</h2>
+<p class="font-body-md text-on-surface-variant leading-relaxed text-sm line-clamp-2">档案数据检索与跨维度知识索引，支持多模态数据查询。</p>
+<div class="mt-4 pt-4 border-t border-outline-variant/10 flex items-center justify-between">
+<span class="text-[10px] px-2 py-0.5 bg-primary/5 text-primary/60 rounded">知识中心</span>
+<span class="text-[10px] font-label-code text-on-surface-variant/50">活跃度: 92%</span>
+</div>
+</div>
+<!-- 学生联络员 -->
+<div class="glass-card rounded-xl p-5 flex flex-col transition-all duration-300 neon-glow-hover cursor-pointer group">
+<div class="scanline-effect"></div>
+<div class="flex items-start justify-between mb-4">
+<div class="w-14 h-14 bg-surface-container rounded-lg border border-primary/20 flex items-center justify-center overflow-hidden relative">
+<img alt="学生联络员" class="w-10 h-10 pixelated" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDbq9MYHZ54vEjLt3LjgC9t_PRXcN6lM84bM0j01fJxpsEd_Pzzlkgb28nm-hk8Ig3jj88dEPd6NEqdZLFlNWAGime-5X5Z6vx9L7Cb1DIBYgg6zJ0RyJZs6MxrRk1sU9JzYKyuAyqBaDYgbk-BGqNFo75AUBEhtDWWXshvn6TMy5hzdPY9fDMou0M1xqfk_SrDduo7Qjedht-mpKRyZKWaXSKTo7dB1nDr3J-fpPbcEPQCJ6SbINYOsmLH7Q9Ka0-L39oNBGDq_BgO"/>
+<div class="absolute bottom-0 right-0 w-2.5 h-2.5 bg-secondary-fixed rounded-full border-2 border-surface shadow-[0_0_5px_#2ae500]"></div>
+</div>
+<span class="material-symbols-outlined text-primary/30 group-hover:text-primary transition-colors text-[20px]">open_in_new</span>
+</div>
+<span class="font-label-code text-[10px] text-primary-fixed-dim/60 uppercase tracking-widest mb-1">XNU-学生-05</span>
+<h2 class="font-headline-sm text-primary mb-2">学生联络员</h2>
+<p class="font-body-md text-on-surface-variant leading-relaxed text-sm line-clamp-2">处理学生福利、活动组织及社区反馈。是学生群体的智能接口。</p>
+<div class="mt-4 pt-4 border-t border-outline-variant/10 flex items-center justify-between">
+<span class="text-[10px] px-2 py-0.5 bg-primary/5 text-primary/60 rounded">社区互动</span>
+<span class="text-[10px] font-label-code text-on-surface-variant/50">活跃度: 89%</span>
+</div>
+</div>
+<!-- 更多示例卡片填充网格感 -->
+<div class="glass-card rounded-xl p-5 flex flex-col transition-all duration-300 neon-glow-hover cursor-pointer group opacity-60">
+<div class="scanline-effect"></div>
+<div class="w-14 h-14 bg-surface-container rounded-lg border border-primary/20 flex items-center justify-center mb-4">
+<span class="material-symbols-outlined text-primary/40 text-3xl">add</span>
+</div>
+<h2 class="font-headline-sm text-primary/60 mb-2">部署新节点</h2>
+<p class="font-body-md text-on-surface-variant/60 text-sm">通过智能合约接口在校园枢纽中部署新的数智实体。</p>
+</div>
+</div>
+<!-- 系统概览面板 -->
+<section class="mt-16 glass-card rounded-xl p-8 border-dashed border-primary/20">
+<div class="flex items-center justify-between mb-8">
+<h3 class="font-label-tech text-primary uppercase tracking-[0.2em]">HUB 系统实时状态</h3>
+<div class="flex items-center gap-4">
+<span class="flex items-center gap-1.5 text-[12px] font-label-code text-secondary-fixed">
+<span class="w-1.5 h-1.5 bg-secondary-fixed rounded-full"></span>
+                                全局在线
+                            </span>
+<span class="text-[12px] font-label-code text-on-surface-variant/40">最后更新: 2024.03.15 14:30:21</span>
+</div>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+<div class="space-y-1">
+<div class="font-headline-lg text-primary">124</div>
+<div class="font-label-code text-sm text-on-surface-variant uppercase tracking-wider">总部署节点</div>
+</div>
+<div class="space-y-1 border-l border-outline-variant/20 pl-8">
+<div class="font-headline-lg text-primary">0.02s</div>
+<div class="font-label-code text-sm text-on-surface-variant uppercase tracking-wider">平均响应时间</div>
+</div>
+<div class="space-y-1 border-l border-outline-variant/20 pl-8">
+<div class="font-headline-lg text-primary">99.9%</div>
+<div class="font-label-code text-sm text-on-surface-variant uppercase tracking-wider">神经同步率</div>
+</div>
+<div class="space-y-1 border-l border-outline-variant/20 pl-8">
+<div class="font-headline-lg text-secondary-fixed">12.4 TB</div>
+<div class="font-label-code text-sm text-on-surface-variant uppercase tracking-wider">今日处理通量</div>
+</div>
+</div>
+</section>
+</div>
+</div>
+</main>
+<script>
+        // 鼠标追踪发光效果 (桌面端增强版)
+        document.querySelectorAll('.glass-card').forEach(card => {
+            card.addEventListener('mousemove', e => {
+                const rect = card.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                card.style.setProperty('--mouse-x', `${x}px`);
+                card.style.setProperty('--mouse-y', `${y}px`);
+                
+                // 动态调整背景光晕 (可选CSS配合实现更复杂效果)
+            });
+        });
+
+        // 模拟点击交互
+        document.querySelectorAll('.glass-card:not(.opacity-60)').forEach(card => {
+            card.addEventListener('click', () => {
+                const name = card.querySelector('h2').innerText;
+                const id = card.querySelector('.font-label-code').innerText;
+                console.log(`[SYSTEM] 正在建立与 ${name} (${id}) 的加密通信频道...`);
+                // 此处可添加跳转或弹窗逻辑
+            });
+        });
+    </script>
+</body></html>

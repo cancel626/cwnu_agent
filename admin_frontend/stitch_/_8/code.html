@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="zh-CN"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>审计日志 - 西华师范数智瞭望</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&amp;family=Space+Grotesk:wght@400;600;700&amp;family=Plus+Jakarta+Sans:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .pixel-border {
+            box-shadow: 0 0 0 2px #10131a, 0 0 0 4px #414754;
+        }
+        .pixel-tail::after {
+            content: '';
+            position: absolute;
+            bottom: -8px;
+            left: 20px;
+            width: 16px;
+            height: 16px;
+            background: inherit;
+            clip-path: polygon(0 0, 100% 0, 50% 100%);
+        }
+        .glow-active {
+            box-shadow: 0 0 8px rgba(58, 134, 255, 0.4);
+        }
+        .header-strip-blue { border-top: 4px solid #adc6ff; }
+        .header-strip-purple { border-top: 4px solid #dab9ff; }
+        .header-strip-error { border-top: 4px solid #ffb4ab; }
+        
+        @keyframes pulse-glow {
+            0% { border-color: #adc6ff; box-shadow: 0 0 4px rgba(173, 198, 255, 0.2); }
+            50% { border-color: #26fedc; box-shadow: 0 0 12px rgba(38, 254, 220, 0.4); }
+            100% { border-color: #adc6ff; box-shadow: 0 0 4px rgba(173, 198, 255, 0.2); }
+        }
+        .hot-data-glow {
+            animation: pulse-glow 2s infinite;
+            border-width: 2px;
+        }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "inverse-primary": "#005ac2",
+                        "error": "#ffb4ab",
+                        "on-surface-variant": "#c2c6d6",
+                        "on-secondary-fixed-variant": "#005144",
+                        "error-container": "#93000a",
+                        "surface-bright": "#363941",
+                        "tertiary": "#dab9ff",
+                        "secondary-fixed": "#26fedc",
+                        "outline": "#8c909f",
+                        "secondary": "#c7fff0",
+                        "surface-container-high": "#272a31",
+                        "primary-container": "#4c8eff",
+                        "background": "#10131a",
+                        "on-background": "#e1e2ec",
+                        "on-tertiary-fixed": "#2a0053",
+                        "on-secondary-fixed": "#00201a",
+                        "on-primary-fixed-variant": "#004494",
+                        "primary": "#adc6ff",
+                        "on-tertiary-fixed-variant": "#611baa",
+                        "surface-dim": "#10131a",
+                        "on-error-container": "#ffdad6",
+                        "outline-variant": "#414754",
+                        "surface": "#10131a",
+                        "surface-variant": "#32353d",
+                        "surface-container-lowest": "#0b0e15",
+                        "on-secondary-container": "#006a5a",
+                        "on-error": "#690005",
+                        "on-primary": "#002e69",
+                        "surface-tint": "#adc6ff",
+                        "inverse-surface": "#e1e2ec",
+                        "tertiary-container": "#b072fb",
+                        "tertiary-fixed": "#eedbff",
+                        "surface-container-low": "#191b23",
+                        "tertiary-fixed-dim": "#dab9ff",
+                        "surface-container-highest": "#32353d",
+                        "primary-fixed": "#d8e2ff",
+                        "secondary-fixed-dim": "#00dfc1",
+                        "on-tertiary": "#460084",
+                        "on-secondary": "#00382f",
+                        "secondary-container": "#00f2d1",
+                        "on-surface": "#e1e2ec",
+                        "on-primary-container": "#00285d",
+                        "inverse-on-surface": "#2d3038",
+                        "surface-container": "#1d2027",
+                        "primary-fixed-dim": "#adc6ff",
+                        "on-tertiary-container": "#3d0075",
+                        "on-primary-fixed": "#001a41"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "gutter": "16px",
+                        "container-margin": "24px",
+                        "unit": "4px",
+                        "sidebar-width": "260px",
+                        "card-padding": "20px"
+                    },
+                    "fontFamily": {
+                        "label-pixel": ["Space Mono"],
+                        "display-lg": ["Space Grotesk"],
+                        "headline-lg": ["Space Grotesk"],
+                        "body-sm": ["Plus Jakarta Sans"],
+                        "title-md": ["Space Grotesk"],
+                        "body-lg": ["Plus Jakarta Sans"]
+                    },
+                    "fontSize": {
+                        "label-pixel": ["12px", {"lineHeight": "1", "fontWeight": "700"}],
+                        "display-lg": ["48px", {"lineHeight": "1.1", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                        "headline-lg": ["32px", {"lineHeight": "1.2", "fontWeight": "700"}],
+                        "body-sm": ["14px", {"lineHeight": "1.5", "fontWeight": "400"}],
+                        "title-md": ["20px", {"lineHeight": "1.4", "fontWeight": "600"}],
+                        "body-lg": ["16px", {"lineHeight": "1.6", "fontWeight": "400"}]
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-background text-on-background font-body-lg text-body-lg">
+<!-- Side Navigation -->
+<aside class="fixed left-0 top-0 h-full w-[260px] bg-surface-container-lowest flex flex-col py-gutter px-2 border-r-2 border-outline-variant z-50">
+<div class="px-4 mb-8">
+<h1 class="font-headline-lg text-headline-lg text-primary tracking-tight">数智瞭望系统</h1>
+<p class="text-on-surface-variant font-label-pixel text-label-pixel mt-1">管理控制台</p>
+</div>
+<nav class="flex-1 space-y-1">
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:bg-surface-variant hover:text-on-surface transition-all duration-200 active:translate-y-[2px]" href="#">
+<span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
+<span class="font-title-md text-title-md">Dashboard</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:bg-surface-variant hover:text-on-surface transition-all duration-200 active:translate-y-[2px]" href="#">
+<span class="material-symbols-outlined" data-icon="person">person</span>
+<span class="font-title-md text-title-md">User</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:bg-surface-variant hover:text-on-surface transition-all duration-200 active:translate-y-[2px]" href="#">
+<span class="material-symbols-outlined" data-icon="input">input</span>
+<span class="font-title-md text-title-md">Collection</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:bg-surface-variant hover:text-on-surface transition-all duration-200 active:translate-y-[2px]" href="#">
+<span class="material-symbols-outlined" data-icon="cleaning_services">cleaning_services</span>
+<span class="font-title-md text-title-md">Cleaning</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:bg-surface-variant hover:text-on-surface transition-all duration-200 active:translate-y-[2px]" href="#">
+<span class="material-symbols-outlined" data-icon="database">database</span>
+<span class="font-title-md text-title-md">Storage</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:bg-surface-variant hover:text-on-surface transition-all duration-200 active:translate-y-[2px]" href="#">
+<span class="material-symbols-outlined" data-icon="psychology">psychology</span>
+<span class="font-title-md text-title-md">AI Inquiry</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:bg-surface-variant hover:text-on-surface transition-all duration-200 active:translate-y-[2px]" href="#">
+<span class="material-symbols-outlined" data-icon="smart_toy">smart_toy</span>
+<span class="font-title-md text-title-md">Digital Staff</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:bg-surface-variant hover:text-on-surface transition-all duration-200 active:translate-y-[2px]" href="#">
+<span class="material-symbols-outlined" data-icon="bolt">bolt</span>
+<span class="font-title-md text-title-md">Skill</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:bg-surface-variant hover:text-on-surface transition-all duration-200 active:translate-y-[2px]" href="#">
+<span class="material-symbols-outlined" data-icon="deployed_code">deployed_code</span>
+<span class="font-title-md text-title-md">Model</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:bg-surface-variant hover:text-on-surface transition-all duration-200 active:translate-y-[2px]" href="#">
+<span class="material-symbols-outlined" data-icon="monitoring">monitoring</span>
+<span class="font-title-md text-title-md">Big Data Screen</span>
+</a>
+<a class="bg-primary-container text-on-primary-container border-r-4 border-secondary-fixed shadow-[0_0_8px_rgba(58,134,255,0.4)] flex items-center gap-3 px-4 py-3 transition-all duration-200 active:translate-y-[2px]" href="#">
+<span class="material-symbols-outlined" data-icon="fact_check">fact_check</span>
+<span class="font-title-md text-title-md">Audit</span>
+</a>
+</nav>
+<div class="mt-auto px-4 py-4">
+<div class="flex items-center gap-3 p-2 bg-surface-container rounded-lg border border-outline-variant">
+<img alt="Admin Avatar" class="w-10 h-10 rounded shadow-md border-2 border-primary" data-alt="A professional male administrator portrait in a high-tech university office setting. He is wearing a modern tech-integrated suit. The background is a dark, sleek control center with glowing blue data visualizations and pixel art accents on the wall. The lighting is low-key with vibrant primary blue highlights." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDq1NrMCzruBXy46bQWCRos0piDTHNSNjkubEInb5I225uywGBJnX8gtJdBzERXwpizqo034RNMj3sbasge0ALEYUzavdRcRFAgp_HS70jtWBcTFmahu4pqHJ5NNKZGcmEb6xReihALrsrEsL8hy5Io0yudKNlzPaEPzyVRqNpXJY3WciwHwFKIl4_So8bIlI642UzI_jYLc5WGS5jAquAfgLIpfgAXZkDnI5aarS8Hw4S1-_FUqCa5a6cQ_inPwX1s3InL5OcVCFCL"/>
+<div class="overflow-hidden">
+<p class="font-label-pixel text-label-pixel truncate">Admin_WCNU</p>
+<p class="text-[10px] text-on-surface-variant truncate">Security Officer</p>
+</div>
+</div>
+</div>
+</aside>
+<!-- Top Navigation -->
+<header class="fixed top-0 right-0 w-[calc(100%-260px)] h-16 bg-surface/80 backdrop-blur-md flex justify-between items-center px-container-margin z-40 border-b-2 border-outline-variant shadow-sm">
+<div class="flex items-center gap-8">
+<h2 class="font-headline-lg text-headline-lg text-secondary-fixed-dim uppercase tracking-widest">西华师范数智瞭望</h2>
+<div class="relative group">
+<span class="absolute inset-y-0 left-3 flex items-center text-on-surface-variant">
+<span class="material-symbols-outlined" data-icon="search">search</span>
+</span>
+<input class="bg-surface-container-high border-2 border-outline-variant focus:border-primary focus:ring-0 text-on-surface rounded-none h-10 pl-10 pr-4 w-64 transition-all" placeholder="搜索审计记录..." type="text"/>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<button class="w-10 h-10 flex items-center justify-center text-on-surface-variant hover:text-primary transition-colors">
+<span class="material-symbols-outlined" data-icon="notifications">notifications</span>
+</button>
+<button class="w-10 h-10 flex items-center justify-center text-on-surface-variant hover:text-primary transition-colors">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+</button>
+<button class="px-4 py-2 bg-error text-on-error font-label-pixel border-b-4 border-on-error-container active:border-b-0 active:translate-y-1 transition-all">
+                Logout
+            </button>
+</div>
+</header>
+<!-- Main Content -->
+<main class="pt-24 pl-[260px] min-h-screen bg-background p-container-margin">
+<!-- Header Section -->
+<div class="flex justify-between items-end mb-8">
+<div>
+<h1 class="font-display-lg text-display-lg text-primary">审计日志 <span class="text-secondary-fixed">AUDIT_LOGS</span></h1>
+<p class="text-on-surface-variant mt-2 max-w-2xl">系统级操作实时追踪，保障西华师范数智环境的安全与合规性。所有高风险操作已触发即时警报。</p>
+</div>
+<div class="flex gap-3">
+<button class="flex items-center gap-2 px-6 py-3 bg-surface-container-high border-2 border-outline-variant font-label-pixel hover:border-primary transition-all">
+<span class="material-symbols-outlined" data-icon="download">download</span> 导出报表
+                </button>
+<button class="flex items-center gap-2 px-6 py-3 bg-primary text-on-primary font-label-pixel border-b-4 border-on-primary-fixed-variant active:border-b-0 active:translate-y-1 transition-all shadow-lg shadow-primary/20">
+<span class="material-symbols-outlined" data-icon="filter_list">filter_list</span> 筛选过滤
+                </button>
+</div>
+</div>
+<!-- Bento Grid Stats -->
+<div class="grid grid-cols-12 gap-gutter mb-8">
+<div class="col-span-12 md:col-span-3 bg-surface-container border border-outline-variant p-card-padding header-strip-blue">
+<div class="flex justify-between items-start">
+<div>
+<p class="text-on-surface-variant font-label-pixel text-label-pixel mb-1">今日总日志</p>
+<h3 class="text-headline-lg font-headline-lg">12,842</h3>
+</div>
+<span class="material-symbols-outlined text-primary" data-icon="analytics">analytics</span>
+</div>
+<div class="mt-4 h-1 bg-surface-variant overflow-hidden">
+<div class="h-full bg-primary" style="width: 65%"></div>
+</div>
+<p class="text-[10px] mt-2 text-primary">较昨日上升 12%</p>
+</div>
+<div class="col-span-12 md:col-span-3 bg-surface-container border border-outline-variant p-card-padding header-strip-purple">
+<div class="flex justify-between items-start">
+<div>
+<p class="text-on-surface-variant font-label-pixel text-label-pixel mb-1">活跃管理员</p>
+<h3 class="text-headline-lg font-headline-lg">24</h3>
+</div>
+<span class="material-symbols-outlined text-tertiary" data-icon="group">group</span>
+</div>
+<div class="flex -space-x-2 mt-4">
+<div class="w-6 h-6 rounded-none bg-outline-variant border border-surface"></div>
+<div class="w-6 h-6 rounded-none bg-primary border border-surface"></div>
+<div class="w-6 h-6 rounded-none bg-secondary border border-surface"></div>
+<div class="w-6 h-6 rounded-none bg-tertiary border border-surface flex items-center justify-center text-[8px] text-on-tertiary">+21</div>
+</div>
+</div>
+<div class="col-span-12 md:col-span-6 bg-surface-container border-2 hot-data-glow p-card-padding flex items-center gap-6">
+<div class="flex-1">
+<p class="text-error font-label-pixel text-label-pixel mb-1 flex items-center gap-2">
+<span class="material-symbols-outlined text-sm" data-icon="warning">warning</span> 实时高危预警
+                    </p>
+<h3 class="text-title-md font-title-md text-on-surface">检测到 3 起未经授权的 API 调用尝试</h3>
+<p class="text-body-sm text-on-surface-variant mt-1">来源 IP: 192.168.1.105 (外部网段) · 目标: /api/v1/user/delete</p>
+</div>
+<button class="px-4 py-2 bg-error text-on-error font-label-pixel">立即处理</button>
+</div>
+</div>
+<!-- Audit Table Section -->
+<div class="bg-surface-container-low border-2 border-outline-variant">
+<div class="p-4 border-b border-outline-variant flex justify-between items-center bg-surface-container">
+<div class="flex gap-4">
+<button class="px-4 py-1 bg-surface-variant border border-primary text-primary font-label-pixel text-label-pixel">全部日志</button>
+<button class="px-4 py-1 text-on-surface-variant font-label-pixel text-label-pixel hover:text-on-surface">登录安全</button>
+<button class="px-4 py-1 text-on-surface-variant font-label-pixel text-label-pixel hover:text-on-surface">数据变更</button>
+<button class="px-4 py-1 text-on-surface-variant font-label-pixel text-label-pixel hover:text-on-surface">权限配置</button>
+</div>
+<div class="flex items-center gap-2 text-on-surface-variant font-label-pixel text-label-pixel">
+<span class="w-2 h-2 bg-secondary-fixed rounded-full inline-block"></span> 实时同步中
+                </div>
+</div>
+<div class="overflow-x-auto">
+<table class="w-full border-collapse">
+<thead>
+<tr class="bg-surface-container-highest border-b border-outline-variant">
+<th class="px-6 py-4 text-left font-label-pixel text-on-surface-variant text-label-pixel uppercase tracking-widest">时间戳 TIMESTAMP</th>
+<th class="px-6 py-4 text-left font-label-pixel text-on-surface-variant text-label-pixel uppercase tracking-widest">操作用户 OPERATOR</th>
+<th class="px-6 py-4 text-left font-label-pixel text-on-surface-variant text-label-pixel uppercase tracking-widest">行为描述 BEHAVIOR</th>
+<th class="px-6 py-4 text-left font-label-pixel text-on-surface-variant text-label-pixel uppercase tracking-widest">IP 地址 SOURCE_IP</th>
+<th class="px-6 py-4 text-left font-label-pixel text-on-surface-variant text-label-pixel uppercase tracking-widest">风险等级 RISK</th>
+<th class="px-6 py-4 text-right font-label-pixel text-on-surface-variant text-label-pixel uppercase tracking-widest">详情 DETAILS</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-outline-variant/30">
+<!-- Row 1 -->
+<tr class="hover:bg-primary/5 transition-colors group">
+<td class="px-6 py-4 font-label-pixel text-primary">2023-11-24 14:20:05</td>
+<td class="px-6 py-4">
+<div class="flex items-center gap-2">
+<div class="w-8 h-8 bg-surface-variant flex items-center justify-center font-bold text-primary">A</div>
+<span>admin_chen</span>
+</div>
+</td>
+<td class="px-6 py-4 text-on-surface group-hover:text-primary">导出全校教职工敏感档案数据</td>
+<td class="px-6 py-4 font-label-pixel">210.41.16.88</td>
+<td class="px-6 py-4">
+<span class="bg-error-container text-on-error-container px-2 py-1 font-label-pixel text-[10px] uppercase tracking-tighter">CRITICAL 高危</span>
+</td>
+<td class="px-6 py-4 text-right">
+<button class="material-symbols-outlined text-on-surface-variant hover:text-primary" data-icon="open_in_new">open_in_new</button>
+</td>
+</tr>
+<!-- Row 2 -->
+<tr class="hover:bg-primary/5 transition-colors group bg-surface-container/20">
+<td class="px-6 py-4 font-label-pixel text-on-surface-variant">2023-11-24 14:18:22</td>
+<td class="px-6 py-4">
+<div class="flex items-center gap-2">
+<div class="w-8 h-8 bg-surface-variant flex items-center justify-center font-bold text-tertiary">L</div>
+<span>li_manager</span>
+</div>
+</td>
+<td class="px-6 py-4 text-on-surface group-hover:text-primary">更新 [数智教室] V2.4 部署镜像</td>
+<td class="px-6 py-4 font-label-pixel">10.2.144.21</td>
+<td class="px-6 py-4">
+<span class="bg-primary/20 text-primary px-2 py-1 font-label-pixel text-[10px] uppercase tracking-tighter border border-primary/30">LOW 低</span>
+</td>
+<td class="px-6 py-4 text-right">
+<button class="material-symbols-outlined text-on-surface-variant hover:text-primary" data-icon="open_in_new">open_in_new</button>
+</td>
+</tr>
+<!-- Row 3 -->
+<tr class="hover:bg-primary/5 transition-colors group">
+<td class="px-6 py-4 font-label-pixel text-on-surface-variant">2023-11-24 14:15:00</td>
+<td class="px-6 py-4">
+<div class="flex items-center gap-2">
+<div class="w-8 h-8 bg-surface-variant flex items-center justify-center font-bold text-secondary">S</div>
+<span>system_bot</span>
+</div>
+</td>
+<td class="px-6 py-4 text-on-surface group-hover:text-primary">自动清理过期缓存 (34.2 GB)</td>
+<td class="px-6 py-4 font-label-pixel">127.0.0.1</td>
+<td class="px-6 py-4">
+<span class="bg-surface-variant text-on-surface-variant px-2 py-1 font-label-pixel text-[10px] uppercase tracking-tighter">INFO 提示</span>
+</td>
+<td class="px-6 py-4 text-right">
+<button class="material-symbols-outlined text-on-surface-variant hover:text-primary" data-icon="open_in_new">open_in_new</button>
+</td>
+</tr>
+<!-- Row 4 -->
+<tr class="hover:bg-primary/5 transition-colors group bg-surface-container/20">
+<td class="px-6 py-4 font-label-pixel text-on-surface-variant">2023-11-24 14:10:45</td>
+<td class="px-6 py-4">
+<div class="flex items-center gap-2">
+<div class="w-8 h-8 bg-surface-variant flex items-center justify-center font-bold text-primary">W</div>
+<span>wang_sec</span>
+</div>
+</td>
+<td class="px-6 py-4 text-on-surface group-hover:text-primary">修改 API 访问白名单策略</td>
+<td class="px-6 py-4 font-label-pixel">210.41.16.204</td>
+<td class="px-6 py-4">
+<span class="bg-tertiary-container text-on-tertiary-container px-2 py-1 font-label-pixel text-[10px] uppercase tracking-tighter">MEDIUM 中危</span>
+</td>
+<td class="px-6 py-4 text-right">
+<button class="material-symbols-outlined text-on-surface-variant hover:text-primary" data-icon="open_in_new">open_in_new</button>
+</td>
+</tr>
+<!-- Row 5 -->
+<tr class="hover:bg-primary/5 transition-colors group">
+<td class="px-6 py-4 font-label-pixel text-primary">2023-11-24 14:05:12</td>
+<td class="px-6 py-4">
+<div class="flex items-center gap-2">
+<div class="w-8 h-8 bg-surface-variant flex items-center justify-center font-bold text-error">U</div>
+<span>unknown_user</span>
+</div>
+</td>
+<td class="px-6 py-4 text-error group-hover:text-error-container">连续 5 次 SSH 登录失败</td>
+<td class="px-6 py-4 font-label-pixel">185.122.34.12</td>
+<td class="px-6 py-4">
+<span class="bg-error text-on-error px-2 py-1 font-label-pixel text-[10px] uppercase tracking-tighter">CRITICAL 高危</span>
+</td>
+<td class="px-6 py-4 text-right">
+<button class="material-symbols-outlined text-on-surface-variant hover:text-primary" data-icon="open_in_new">open_in_new</button>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="p-4 border-t border-outline-variant bg-surface-container flex justify-between items-center">
+<p class="font-label-pixel text-label-pixel text-on-surface-variant">SHOWING 1-10 OF 1,280 RECORDS</p>
+<div class="flex gap-2">
+<button class="w-8 h-8 flex items-center justify-center border border-outline-variant hover:bg-primary hover:text-on-primary transition-all">
+<span class="material-symbols-outlined" data-icon="chevron_left">chevron_left</span>
+</button>
+<button class="w-8 h-8 flex items-center justify-center bg-primary text-on-primary font-label-pixel">1</button>
+<button class="w-8 h-8 flex items-center justify-center border border-outline-variant hover:bg-surface-variant font-label-pixel">2</button>
+<button class="w-8 h-8 flex items-center justify-center border border-outline-variant hover:bg-surface-variant font-label-pixel">3</button>
+<button class="w-8 h-8 flex items-center justify-center border border-outline-variant hover:bg-surface-variant font-label-pixel">...</button>
+<button class="w-8 h-8 flex items-center justify-center border border-outline-variant hover:bg-primary hover:text-on-primary transition-all">
+<span class="material-symbols-outlined" data-icon="chevron_right">chevron_right</span>
+</button>
+</div>
+</div>
+</div>
+<!-- AI Assistant Inquiry Section -->
+<div class="mt-12 max-w-4xl">
+<div class="bg-primary p-card-padding relative pixel-tail text-on-primary shadow-xl">
+<div class="flex items-center gap-3 mb-4">
+<span class="material-symbols-outlined text-3xl" data-icon="psychology">psychology</span>
+<h4 class="font-title-md text-title-md">AI 审计智能顾问</h4>
+</div>
+<p class="mb-4">"根据最近 24 小时的日志分析，我发现来自 `210.41.16.*` 网段的操作频率异常增高。建议您复核该网段的权限范围，并重点关注数据导出相关的审计项。"</p>
+<div class="flex gap-3">
+<button class="px-4 py-2 bg-on-primary text-primary font-label-pixel text-label-pixel border-b-2 border-primary-container active:translate-y-px">生成详细安全报告</button>
+<button class="px-4 py-2 bg-transparent border border-on-primary/50 text-on-primary font-label-pixel text-label-pixel hover:bg-on-primary/10">查看异常溯源图</button>
+</div>
+</div>
+</div>
+</main>
+<!-- Floating Action Button - Only relevant on main screen -->
+<button class="fixed bottom-8 right-8 w-16 h-16 bg-secondary-fixed text-on-secondary-fixed flex items-center justify-center shadow-[0_0_15px_rgba(38,254,220,0.6)] hover:scale-110 active:scale-95 transition-all z-50">
+<span class="material-symbols-outlined text-3xl" data-icon="security" style="font-variation-settings: 'FILL' 1;">security</span>
+</button>
+<script>
+        // Micro-interactions for table rows
+        document.querySelectorAll('tr').forEach(row => {
+            row.addEventListener('click', () => {
+                console.log('Row clicked - Detail view would open here');
+            });
+        });
+
+        // Simple simulated search focus
+        const searchInput = document.querySelector('input[type="text"]');
+        searchInput.addEventListener('focus', () => {
+            searchInput.parentElement.classList.add('glow-active');
+        });
+        searchInput.addEventListener('blur', () => {
+            searchInput.parentElement.classList.remove('glow-active');
+        });
+    </script>
+</body></html>

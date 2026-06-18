@@ -1,0 +1,501 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="zh-CN"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&amp;family=Space+Grotesk:wght@300..700&amp;family=Space+Mono:ital,wght@0,400;0,700;1,400;1,700&amp;display=swap" rel="stylesheet"/>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            display: inline-block;
+            vertical-align: middle;
+        }
+        .pixel-border {
+            box-shadow: 
+                0 -4px 0 -2px #adc6ff,
+                0 4px 0 -2px #adc6ff,
+                -4px 0 0 -2px #adc6ff,
+                4px 0 0 -2px #adc6ff;
+        }
+        .btn-3d {
+            transition: all 0.1s ease;
+            border-bottom-width: 4px;
+        }
+        .btn-3d:active {
+            transform: translateY(2px);
+            border-bottom-width: 0px;
+            margin-bottom: 4px;
+        }
+        .pixel-status {
+            width: 8px;
+            height: 8px;
+            display: inline-block;
+        }
+        /* Custom scrollbar for pixel aesthetic */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #1d2027; }
+        ::-webkit-scrollbar-thumb { background: #414754; border: 2px solid #1d2027; }
+        ::-webkit-scrollbar-thumb:hover { background: #8c909f; }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "inverse-primary": "#005ac2",
+                      "surface-container-lowest": "#0b0e15",
+                      "tertiary": "#dab9ff",
+                      "on-error-container": "#ffdad6",
+                      "surface-variant": "#32353d",
+                      "on-primary-fixed": "#001a41",
+                      "error": "#ffb4ab",
+                      "surface-dim": "#10131a",
+                      "outline": "#8c909f",
+                      "surface-tint": "#adc6ff",
+                      "primary-fixed": "#d8e2ff",
+                      "secondary-fixed": "#26fedc",
+                      "on-primary-container": "#00285d",
+                      "on-secondary-fixed": "#00201a",
+                      "outline-variant": "#414754",
+                      "surface-container-high": "#272a31",
+                      "on-primary-fixed-variant": "#004494",
+                      "secondary": "#c7fff0",
+                      "on-error": "#690005",
+                      "on-surface": "#e1e2ec",
+                      "error-container": "#93000a",
+                      "on-surface-variant": "#c2c6d6",
+                      "on-tertiary-container": "#3d0075",
+                      "on-secondary": "#00382f",
+                      "surface-container-highest": "#32353d",
+                      "surface-bright": "#363941",
+                      "primary-fixed-dim": "#adc6ff",
+                      "primary-container": "#4c8eff",
+                      "surface": "#10131a",
+                      "primary": "#adc6ff",
+                      "on-secondary-fixed-variant": "#005144",
+                      "background": "#10131a",
+                      "on-secondary-container": "#006a5a",
+                      "inverse-surface": "#e1e2ec",
+                      "tertiary-container": "#b072fb",
+                      "inverse-on-surface": "#2d3038",
+                      "surface-container": "#1d2027",
+                      "on-tertiary": "#460084",
+                      "secondary-container": "#00f2d1",
+                      "tertiary-fixed": "#eedbff",
+                      "tertiary-fixed-dim": "#dab9ff",
+                      "secondary-fixed-dim": "#00dfc1",
+                      "surface-container-low": "#191b23",
+                      "on-tertiary-fixed-variant": "#611baa",
+                      "on-background": "#e1e2ec",
+                      "on-primary": "#002e69",
+                      "on-tertiary-fixed": "#2a0053"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.25rem",
+                      "lg": "0.5rem",
+                      "xl": "0.75rem",
+                      "full": "9999px"
+              },
+              "spacing": {
+                      "sidebar-width": "260px",
+                      "unit": "4px",
+                      "card-padding": "20px",
+                      "gutter": "16px",
+                      "container-margin": "24px"
+              },
+              "fontFamily": {
+                      "title-md": ["Space Grotesk"],
+                      "headline-lg-mobile": ["Space Grotesk"],
+                      "label-pixel": ["Space Mono", "monospace"],
+                      "body-lg": ["Plus Jakarta Sans", "sans-serif"],
+                      "body-sm": ["Plus Jakarta Sans", "sans-serif"],
+                      "headline-lg": ["Space Grotesk"],
+                      "display-lg": ["Space Grotesk"]
+              },
+              "fontSize": {
+                      "title-md": ["20px", {"lineHeight": "1.4", "fontWeight": "600"}],
+                      "headline-lg-mobile": ["24px", {"lineHeight": "1.2", "fontWeight": "700"}],
+                      "label-pixel": ["12px", {"lineHeight": "1", "fontWeight": "700"}],
+                      "body-lg": ["16px", {"lineHeight": "1.6", "fontWeight": "400"}],
+                      "body-sm": ["14px", {"lineHeight": "1.5", "fontWeight": "400"}],
+                      "headline-lg": ["32px", {"lineHeight": "1.2", "fontWeight": "700"}],
+                      "display-lg": ["48px", {"lineHeight": "1.1", "letterSpacing": "-0.02em", "fontWeight": "700"}]
+              }
+            },
+          },
+        }
+    </script>
+</head>
+<body class="bg-background text-on-background font-body-lg overflow-hidden">
+<!-- Side Navigation Bar -->
+<aside class="fixed left-0 top-0 h-screen w-[260px] bg-surface-container-lowest border-r-2 border-outline-variant z-50 flex flex-col py-4 px-2">
+<div class="mb-10 px-4">
+<h1 class="font-headline-lg text-headline-lg text-primary tracking-tight">数智瞭望系统</h1>
+<p class="font-label-pixel text-label-pixel text-outline uppercase tracking-widest mt-1">管理控制台</p>
+</div>
+<nav class="flex-1 space-y-1 overflow-y-auto">
+<!-- Navigation Items Mapping -->
+<a class="flex items-center gap-3 px-4 py-3 font-title-md text-on-surface-variant hover:bg-surface-variant transition-all duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
+<span>仪表盘</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 font-title-md bg-primary-container text-on-primary-container border-r-4 border-secondary-fixed shadow-[0_0_8px_rgba(58,134,255,0.4)] transition-all duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="person">person</span>
+<span>用户管理</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 font-title-md text-on-surface-variant hover:bg-surface-variant transition-all duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="input">input</span>
+<span>采集管理</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 font-title-md text-on-surface-variant hover:bg-surface-variant transition-all duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="cleaning_services">cleaning_services</span>
+<span>清洗服务</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 font-title-md text-on-surface-variant hover:bg-surface-variant transition-all duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="database">database</span>
+<span>数据存储</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 font-title-md text-on-surface-variant hover:bg-surface-variant transition-all duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="psychology">psychology</span>
+<span>AI 查询</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 font-title-md text-on-surface-variant hover:bg-surface-variant transition-all duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="smart_toy">smart_toy</span>
+<span>数字员工</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 font-title-md text-on-surface-variant hover:bg-surface-variant transition-all duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="bolt">bolt</span>
+<span>技能管理</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 font-title-md text-on-surface-variant hover:bg-surface-variant transition-all duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="deployed_code">deployed_code</span>
+<span>模型仓库</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 font-title-md text-on-surface-variant hover:bg-surface-variant transition-all duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="monitoring">monitoring</span>
+<span>大数据看板</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 font-title-md text-on-surface-variant hover:bg-surface-variant transition-all duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="fact_check">fact_check</span>
+<span>审计日志</span>
+</a>
+</nav>
+<div class="mt-auto border-t-2 border-outline-variant pt-4 px-2">
+<div class="flex items-center gap-3 p-2 rounded-lg bg-surface-container-high">
+<div class="w-10 h-10 bg-primary/20 flex items-center justify-center border-2 border-primary">
+<span class="material-symbols-outlined text-primary" data-icon="school">school</span>
+</div>
+<div class="overflow-hidden">
+<p class="text-xs font-label-pixel text-primary truncate">WCNU 管理员</p>
+<p class="text-[10px] text-outline truncate italic">管理控制台 v2.4</p>
+</div>
+</div>
+</div>
+</aside>
+<!-- Top Navigation Bar -->
+<header class="fixed top-0 right-0 w-[calc(100%-260px)] h-16 bg-surface/80 backdrop-blur-md dark:bg-surface-dim/80 border-b-2 border-outline-variant z-40 px-6 flex justify-between items-center shadow-sm">
+<div class="flex items-center gap-4 flex-1">
+<div class="relative w-full max-w-md group">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-outline-variant group-focus-within:text-primary" data-icon="search">search</span>
+<input class="w-full bg-surface-container border-2 border-outline-variant rounded-none py-1.5 pl-10 pr-4 text-on-surface focus:outline-none focus:border-primary focus:ring-0 font-body-sm transition-all" placeholder="全局系统搜索..." type="text"/>
+</div>
+</div>
+<div class="flex items-center gap-6">
+<div class="flex items-center gap-4">
+<button class="relative p-2 text-on-surface-variant hover:text-primary transition-colors">
+<span class="material-symbols-outlined" data-icon="notifications">notifications</span>
+<span class="absolute top-1.5 right-1.5 w-2 h-2 bg-error"></span>
+</button>
+<button class="p-2 text-on-surface-variant hover:text-primary transition-colors">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+</button>
+</div>
+<div class="h-8 w-px bg-outline-variant"></div>
+<div class="flex items-center gap-4">
+<span class="font-headline-lg text-[18px] text-secondary-fixed-dim uppercase tracking-widest">西华师范数智瞭望</span>
+<button class="bg-primary text-on-primary px-4 py-1 font-label-pixel btn-3d border-b-primary-container border-primary">退出登录</button>
+</div>
+</div>
+</header>
+<!-- Main Content Canvas -->
+<main class="ml-[260px] pt-16 h-screen overflow-y-auto bg-surface">
+<div class="p-6">
+<!-- Header Section -->
+<div class="mb-8 flex flex-col md:flex-row md:items-end justify-between gap-4">
+<div>
+<h2 class="font-headline-lg text-display-lg text-primary">用户管理</h2>
+<p class="font-body-lg text-on-surface-variant mt-2 border-l-4 border-primary pl-4">配置全系统角色并监控 WCNU 网络中的实时用户活动。</p>
+</div>
+<div class="flex gap-4">
+<button class="flex items-center gap-2 bg-surface-container border-2 border-outline-variant px-4 py-2 hover:border-primary hover:text-primary transition-all font-label-pixel active:translate-y-px">
+<span class="material-symbols-outlined text-[18px]" data-icon="filter_list">filter_list</span>
+<span>筛选</span>
+</button>
+<button class="flex items-center gap-2 bg-primary text-on-primary px-6 py-2 btn-3d border-b-primary-container font-label-pixel">
+<span class="material-symbols-outlined text-[18px]" data-icon="person_add">person_add</span>
+<span>添加用户</span>
+</button>
+</div>
+</div>
+<!-- Dashboard Stats Summary (Mini Bento) -->
+<div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
+<div class="bg-surface-container border-2 border-outline-variant p-4 hover:border-primary transition-all group">
+<p class="font-label-pixel text-outline text-xs uppercase mb-1">当前活跃</p>
+<div class="flex items-end justify-between">
+<span class="font-display-lg text-[28px] text-primary">1,284</span>
+<span class="material-symbols-outlined text-secondary-fixed-dim" data-icon="trending_up">trending_up</span>
+</div>
+<div class="w-full h-1 bg-outline-variant mt-3 overflow-hidden">
+<div class="h-full bg-primary w-[75%] transition-all duration-1000 group-hover:w-full"></div>
+</div>
+</div>
+<div class="bg-surface-container border-2 border-outline-variant p-4 hover:border-secondary-fixed-dim transition-all group">
+<p class="font-label-pixel text-outline text-xs uppercase mb-1">编辑员</p>
+<div class="flex items-end justify-between">
+<span class="font-display-lg text-[28px] text-secondary-fixed-dim">342</span>
+<span class="material-symbols-outlined text-secondary-fixed-dim" data-icon="edit">edit</span>
+</div>
+<div class="w-full h-1 bg-outline-variant mt-3">
+<div class="h-full bg-secondary-fixed-dim w-[40%] group-hover:w-[45%] transition-all"></div>
+</div>
+</div>
+<div class="bg-surface-container border-2 border-outline-variant p-4 hover:border-tertiary transition-all group">
+<p class="font-label-pixel text-outline text-xs uppercase mb-1">系统管理员</p>
+<div class="flex items-end justify-between">
+<span class="font-display-lg text-[28px] text-tertiary">12</span>
+<span class="material-symbols-outlined text-tertiary" data-icon="verified_user">verified_user</span>
+</div>
+<div class="w-full h-1 bg-outline-variant mt-3">
+<div class="h-full bg-tertiary w-[10%] group-hover:w-[12%] transition-all"></div>
+</div>
+</div>
+<div class="bg-surface-container border-2 border-outline-variant p-4 hover:border-error transition-all group">
+<p class="font-label-pixel text-outline text-xs uppercase mb-1">离线</p>
+<div class="flex items-end justify-between">
+<span class="font-display-lg text-[28px] text-error">156</span>
+<span class="material-symbols-outlined text-error" data-icon="cloud_off">cloud_off</span>
+</div>
+<div class="w-full h-1 bg-outline-variant mt-3">
+<div class="h-full bg-error w-[15%] group-hover:w-[20%] transition-all"></div>
+</div>
+</div>
+</div>
+<!-- Table Section -->
+<div class="bg-surface-container-low border-2 border-outline-variant relative overflow-hidden">
+<div class="h-1 w-full bg-primary mb-0.5"></div>
+<div class="overflow-x-auto">
+<table class="w-full text-left border-collapse font-body-sm">
+<thead class="bg-surface-container-high border-b-2 border-outline-variant">
+<tr>
+<th class="px-6 py-4 font-label-pixel text-primary uppercase tracking-tighter">头像</th>
+<th class="px-6 py-4 font-label-pixel text-primary uppercase tracking-tighter">用户名</th>
+<th class="px-6 py-4 font-label-pixel text-primary uppercase tracking-tighter">角色</th>
+<th class="px-6 py-4 font-label-pixel text-primary uppercase tracking-tighter">状态</th>
+<th class="px-6 py-4 font-label-pixel text-primary uppercase tracking-tighter text-right">操作</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-outline-variant/30">
+<!-- Row 1 -->
+<tr class="hover:bg-primary/5 transition-colors group">
+<td class="px-6 py-4">
+<div class="w-10 h-10 border-2 border-primary overflow-hidden bg-surface-variant flex items-center justify-center p-0.5">
+<img alt="像素头像" class="w-full h-full object-cover" data-alt="A retro 16-bit pixel art style character avatar with bright blue hair and a futuristic visor. The character is set against a vibrant cyan background, fitting the high-tech digital aesthetic of a university data command center. The lighting is sharp and contrasted, emphasizing the pixelated geometry of the facial features." src="https://lh3.googleusercontent.com/aida-public/AB6AXuA285pGAxTyRK4UBxB94sgayIawNgUQS-7-RMjWMD52OMZL6bpCP8RXS0bzf4VNgKdgVW19iErbk25WGqlMfkB_Q4XLz7GJrpmhoxtCJcdLUWeZXGvmZUHyR3QsUKEMMRcW4I2ggzY7JbJsDlatpY3cIBHbR24SsYG6d3wOHVbeNh_gbuO0JhyLWrIScmOMM84z9TFmIjfBU9UWpCmsnOz0Co-KkwJ7OHBlE9kW9yyV4R-NSsAvMUNcSwH6S8LMODvYgdWU5WqoUCfZ"/>
+</div>
+</td>
+<td class="px-6 py-4">
+<div class="flex flex-col">
+<span class="font-title-md text-on-surface group-hover:text-primary transition-colors">Chen_Wei_Admin</span>
+<span class="text-xs text-outline font-label-pixel">c.wei@wcnu.edu.cn</span>
+</div>
+</td>
+<td class="px-6 py-4">
+<span class="font-label-pixel text-tertiary bg-tertiary/10 px-2 py-1 border border-tertiary">管理员</span>
+</td>
+<td class="px-6 py-4">
+<div class="flex items-center gap-2">
+<span class="pixel-status bg-secondary-fixed-dim animate-pulse"></span>
+<span class="font-label-pixel text-secondary-fixed-dim uppercase text-[10px]">在线</span>
+</div>
+</td>
+<td class="px-6 py-4 text-right">
+<div class="flex justify-end gap-2">
+<button class="p-1.5 hover:bg-surface-variant border border-transparent hover:border-outline-variant text-outline hover:text-on-surface transition-all">
+<span class="material-symbols-outlined text-sm" data-icon="edit">edit</span>
+</button>
+<button class="p-1.5 hover:bg-surface-variant border border-transparent hover:border-outline-variant text-outline hover:text-on-surface transition-all">
+<span class="material-symbols-outlined text-sm" data-icon="visibility">visibility</span>
+</button>
+<button class="p-1.5 hover:bg-error/20 border border-transparent hover:border-error text-error transition-all">
+<span class="material-symbols-outlined text-sm" data-icon="delete">delete</span>
+</button>
+</div>
+</td>
+</tr>
+<!-- Row 2 -->
+<tr class="hover:bg-primary/5 transition-colors group bg-surface-container/30">
+<td class="px-6 py-4">
+<div class="w-10 h-10 border-2 border-outline-variant overflow-hidden bg-surface-variant flex items-center justify-center p-0.5">
+<img alt="像素头像" class="w-full h-full object-cover" data-alt="A pixel art character avatar representing a female administrator with green hair and vintage 80s computer glasses. The avatar has a warm sunset orange background. The style is strictly 16-bit grid-aligned, evoking a high-end digital simulator interface for a vibrant university management platform." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDPPt9NelkUKhipsd1axl79Udism2PN26ZlX6KcCj8v9Yh0-bmz53Q6zVesP20jNM3763jf-Q2oEXlzFP0fnmu02wfTumPEi1FbEsXz8PydSY25e3NuP7zgBLf0vGLla83ddIj5fHhPc8hgI_5d_U8FbQOJ_svTBtPBV003muueQ_bpF1NmBy615cayOFEktK7gXA0RKuyUXYD6SQBOHqdhyDkfztH-5Dd-q_SqBsLPUivPmMH76I4sZXgmcKKkrtODONv0RuR_vBoL"/>
+</div>
+</td>
+<td class="px-6 py-4">
+<div class="flex flex-col">
+<span class="font-title-md text-on-surface group-hover:text-primary transition-colors">Zhang_Ying_Editor</span>
+<span class="text-xs text-outline font-label-pixel">y.zhang@wcnu.edu.cn</span>
+</div>
+</td>
+<td class="px-6 py-4">
+<span class="font-label-pixel text-primary bg-primary/10 px-2 py-1 border border-primary">编辑员</span>
+</td>
+<td class="px-6 py-4">
+<div class="flex items-center gap-2">
+<span class="pixel-status bg-secondary-fixed-dim"></span>
+<span class="font-label-pixel text-secondary-fixed-dim uppercase text-[10px]">在线</span>
+</div>
+</td>
+<td class="px-6 py-4 text-right">
+<div class="flex justify-end gap-2">
+<button class="p-1.5 hover:bg-surface-variant border border-transparent hover:border-outline-variant text-outline hover:text-on-surface transition-all">
+<span class="material-symbols-outlined text-sm" data-icon="edit">edit</span>
+</button>
+<button class="p-1.5 hover:bg-surface-variant border border-transparent hover:border-outline-variant text-outline hover:text-on-surface transition-all">
+<span class="material-symbols-outlined text-sm" data-icon="visibility">visibility</span>
+</button>
+<button class="p-1.5 hover:bg-error/20 border border-transparent hover:border-error text-error transition-all">
+<span class="material-symbols-outlined text-sm" data-icon="delete">delete</span>
+</button>
+</div>
+</td>
+</tr>
+<!-- Row 3 -->
+<tr class="hover:bg-primary/5 transition-colors group">
+<td class="px-6 py-4">
+<div class="w-10 h-10 border-2 border-outline-variant overflow-hidden bg-surface-variant flex items-center justify-center p-0.5">
+<img alt="像素头像" class="w-full h-full object-cover" data-alt="A classic pixel art male character with a robotic cybernetic eye and a red headband. The background is a soft pastel pink. The character's expression is serious and professional, set in a 16-bit aesthetic that aligns with a modern data analytics command center's vibrant and gamified brand personality." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCp02gqXI_8rM6MyadQHH1eRLTOxWGZ8hd65pMwg6ccvpZZaqplGIgPRKhY8DHuTrcv14Cp1XhR2OTHLhxkhc8w3xGOu5xxVUgNzMsfImprBwiUP9hbxKF-1Uge1cWOZhnrUrXOOfjeDnVBHq72_GEvwWLlCweZqACHipY03U2pE9qfLeMy1IG-7l8tAPMf-wfug9p7C0C6UVbBxHpXb8szZico4dIz4wCNYs4kuM3Xtfb8mwLxijuKH93GNcaR_18WSoE8_MzE_aDS"/>
+</div>
+</td>
+<td class="px-6 py-4">
+<div class="flex flex-col">
+<span class="font-title-md text-on-surface group-hover:text-primary transition-colors">Li_Qiang_Viewer</span>
+<span class="text-xs text-outline font-label-pixel">q.li@wcnu.edu.cn</span>
+</div>
+</td>
+<td class="px-6 py-4">
+<span class="font-label-pixel text-on-surface-variant bg-surface-variant/50 px-2 py-1 border border-outline-variant">查看员</span>
+</td>
+<td class="px-6 py-4">
+<div class="flex items-center gap-2">
+<span class="pixel-status bg-outline"></span>
+<span class="font-label-pixel text-outline uppercase text-[10px]">离线</span>
+</div>
+</td>
+<td class="px-6 py-4 text-right">
+<div class="flex justify-end gap-2">
+<button class="p-1.5 hover:bg-surface-variant border border-transparent hover:border-outline-variant text-outline hover:text-on-surface transition-all">
+<span class="material-symbols-outlined text-sm" data-icon="edit">edit</span>
+</button>
+<button class="p-1.5 hover:bg-surface-variant border border-transparent hover:border-outline-variant text-outline hover:text-on-surface transition-all">
+<span class="material-symbols-outlined text-sm" data-icon="visibility">visibility</span>
+</button>
+<button class="p-1.5 hover:bg-error/20 border border-transparent hover:border-error text-error transition-all">
+<span class="material-symbols-outlined text-sm" data-icon="delete">delete</span>
+</button>
+</div>
+</td>
+</tr>
+<!-- Row 4 -->
+<tr class="hover:bg-primary/5 transition-colors group bg-surface-container/30">
+<td class="px-6 py-4">
+<div class="w-10 h-10 border-2 border-outline-variant overflow-hidden bg-surface-variant flex items-center justify-center p-0.5">
+<img alt="像素头像" class="w-full h-full object-cover" data-alt="Pixel art avatar of a futuristic scientist character with silver hair and holographic monitors reflecting in her eyes. The background color is a deep lavender. The 16-bit rendering style is crisp and detailed, maintaining the brand's 'intelligent and vibrant' gamified aesthetic for a high-performance university data dashboard." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAWIaJ6PstyTS9QdgPUhYTjb2CaftHp2Secjfx4CRm0IFxI203b6mEibB_cC4yjo6aPpqjCA3nOCp0vVfmhblT9tT6cycWAzOHG34YJCEFCNczofiS1jVVnJSUy9yzfFYFTvzxYwpeO6FvavlK9xzYiR5yDPpxrrDd7MVdN1ii8g5dwL05GnNao9TjTlT-OgjQIDHeNqGmr_Unn7FWTDxJvB7zaHd0H6ZEORhH84qo3jen9amEjz8RW03jxvCRi3ByMCNQaESO8b_r7"/>
+</div>
+</td>
+<td class="px-6 py-4">
+<div class="flex flex-col">
+<span class="font-title-md text-on-surface group-hover:text-primary transition-colors">Wang_Fan_Editor</span>
+<span class="text-xs text-outline font-label-pixel">f.wang@wcnu.edu.cn</span>
+</div>
+</td>
+<td class="px-6 py-4">
+<span class="font-label-pixel text-primary bg-primary/10 px-2 py-1 border border-primary">编辑员</span>
+</td>
+<td class="px-6 py-4">
+<div class="flex items-center gap-2">
+<span class="pixel-status bg-secondary-fixed-dim"></span>
+<span class="font-label-pixel text-secondary-fixed-dim uppercase text-[10px]">在线</span>
+</div>
+</td>
+<td class="px-6 py-4 text-right">
+<div class="flex justify-end gap-2">
+<button class="p-1.5 hover:bg-surface-variant border border-transparent hover:border-outline-variant text-outline hover:text-on-surface transition-all">
+<span class="material-symbols-outlined text-sm" data-icon="edit">edit</span>
+</button>
+<button class="p-1.5 hover:bg-surface-variant border border-transparent hover:border-outline-variant text-outline hover:text-on-surface transition-all">
+<span class="material-symbols-outlined text-sm" data-icon="visibility">visibility</span>
+</button>
+<button class="p-1.5 hover:bg-error/20 border border-transparent hover:border-error text-error transition-all">
+<span class="material-symbols-outlined text-sm" data-icon="delete">delete</span>
+</button>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<!-- Pagination -->
+<div class="bg-surface-container-high px-6 py-4 flex flex-col sm:flex-row items-center justify-between border-t-2 border-outline-variant gap-4">
+<p class="font-label-pixel text-outline text-xs uppercase">显示第 1 至 4 条，共 1,284 条记录</p>
+<div class="flex items-center gap-1">
+<button class="w-10 h-10 flex items-center justify-center border-2 border-outline-variant hover:border-primary text-outline hover:text-primary transition-all active:translate-y-px">
+<span class="material-symbols-outlined" data-icon="chevron_left">chevron_left</span>
+</button>
+<button class="w-10 h-10 flex items-center justify-center border-2 border-primary bg-primary text-on-primary font-label-pixel">1</button>
+<button class="w-10 h-10 flex items-center justify-center border-2 border-outline-variant hover:border-primary text-outline hover:text-primary font-label-pixel transition-all active:translate-y-px">2</button>
+<button class="w-10 h-10 flex items-center justify-center border-2 border-outline-variant hover:border-primary text-outline hover:text-primary font-label-pixel transition-all active:translate-y-px">3</button>
+<span class="px-2 text-outline">...</span>
+<button class="w-10 h-10 flex items-center justify-center border-2 border-outline-variant hover:border-primary text-outline hover:text-primary font-label-pixel transition-all active:translate-y-px">128</button>
+<button class="w-10 h-10 flex items-center justify-center border-2 border-outline-variant hover:border-primary text-outline hover:text-primary transition-all active:translate-y-px">
+<span class="material-symbols-outlined" data-icon="chevron_right">chevron_right</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Footer Meta Info -->
+<div class="mt-8 grid grid-cols-1 md:grid-cols-2 gap-8 opacity-60">
+<div class="flex items-start gap-4">
+<div class="bg-primary/10 p-3 border-2 border-primary/20">
+<span class="material-symbols-outlined text-primary" data-icon="security">security</span>
+</div>
+<div>
+<h4 class="font-label-pixel text-primary uppercase text-sm">安全策略</h4>
+<p class="text-xs font-body-sm text-on-surface-variant mt-1">所有用户修改均记录在全局审计日志中。未经授权的访问尝试将立即触发校园安保系统的警报。</p>
+</div>
+</div>
+<div class="flex items-start gap-4">
+<div class="bg-secondary-fixed-dim/10 p-3 border-2 border-secondary-fixed-dim/20">
+<span class="material-symbols-outlined text-secondary-fixed-dim" data-icon="sync">sync</span>
+</div>
+<div>
+<h4 class="font-label-pixel text-secondary-fixed-dim uppercase text-sm">数据同步</h4>
+<p class="text-xs font-body-sm text-on-surface-variant mt-1">已启用与 WCNU 统一身份认证系统的目录同步。上次同步时间为 4 分钟前。系统每 15 分钟自动更新一次。</p>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- UI Interaction Scripts -->
+<script>
+    document.querySelectorAll('button').forEach(btn => {
+        btn.addEventListener('click', () => {
+            console.log('用户管理控制台触发操作。');
+        });
+    });
+
+    setInterval(() => {
+        console.log('正在刷新实时用户状态...');
+    }, 30000);
+</script>
+</body></html>

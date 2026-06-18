@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="zh-CN"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>西华师范数智瞭望 - 大数据大屏</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&amp;family=Space+Mono:wght@400;700&amp;family=Plus+Jakarta+Sans:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        @keyframes scanline {
+            0% { transform: translateY(-100%); }
+            100% { transform: translateY(100%); }
+        }
+        .scanline-effect::after {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(to bottom, transparent 50%, rgba(58, 134, 255, 0.05) 51%, transparent 52%);
+            background-size: 100% 4px;
+            pointer-events: none;
+            z-index: 50;
+        }
+        .glow-border {
+            box-shadow: 0 0 15px rgba(58, 134, 255, 0.3), inset 0 0 15px rgba(58, 134, 255, 0.1);
+            border: 1px solid rgba(58, 134, 255, 0.4);
+        }
+        .pixel-corners {
+            clip-path: polygon(
+                0 4px, 4px 4px, 4px 0, 
+                calc(100% - 4px) 0, calc(100% - 4px) 4px, 100% 4px, 
+                100% calc(100% - 4px), calc(100% - 4px) calc(100% - 4px), calc(100% - 4px) 100%, 
+                4px 100%, 4px calc(100% - 4px), 0 calc(100% - 4px)
+            );
+        }
+        .grid-bg {
+            background-image: 
+                linear-gradient(to right, rgba(58, 134, 255, 0.1) 1px, transparent 1px),
+                linear-gradient(to bottom, rgba(58, 134, 255, 0.1) 1px, transparent 1px);
+            background-size: 40px 40px;
+        }
+        .neon-text-pulse {
+            text-shadow: 0 0 10px rgba(173, 198, 255, 0.8), 0 0 20px rgba(173, 198, 255, 0.4);
+            animation: pulse-glow 2s infinite alternate;
+        }
+        @keyframes pulse-glow {
+            from { opacity: 0.8; text-shadow: 0 0 10px rgba(173, 198, 255, 0.8); }
+            to { opacity: 1; text-shadow: 0 0 25px rgba(173, 198, 255, 1), 0 0 40px rgba(58, 134, 255, 0.6); }
+        }
+        .scrolling-log::-webkit-scrollbar {
+            width: 4px;
+        }
+        .scrolling-log::-webkit-scrollbar-thumb {
+            background: #414754;
+            border-radius: 2px;
+        }
+        .header-bg {
+            background: linear-gradient(180deg, rgba(29, 32, 39, 0.9) 0%, transparent 100%);
+            border-bottom: 2px solid rgba(58, 134, 255, 0.2);
+        }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "inverse-primary": "#005ac2",
+                        "surface-container-lowest": "#0b0e15",
+                        "tertiary": "#dab9ff",
+                        "on-error-container": "#ffdad6",
+                        "surface-variant": "#32353d",
+                        "on-primary-fixed": "#001a41",
+                        "error": "#ffb4ab",
+                        "surface-dim": "#10131a",
+                        "outline": "#8c909f",
+                        "surface-tint": "#adc6ff",
+                        "primary-fixed": "#d8e2ff",
+                        "secondary-fixed": "#26fedc",
+                        "on-primary-container": "#00285d",
+                        "on-secondary-fixed": "#00201a",
+                        "outline-variant": "#414754",
+                        "surface-container-high": "#272a31",
+                        "on-primary-fixed-variant": "#004494",
+                        "secondary": "#c7fff0",
+                        "on-error": "#690005",
+                        "on-surface": "#e1e2ec",
+                        "error-container": "#93000a",
+                        "on-surface-variant": "#c2c6d6",
+                        "on-tertiary-container": "#3d0075",
+                        "on-secondary": "#00382f",
+                        "surface-container-highest": "#32353d",
+                        "surface-bright": "#363941",
+                        "primary-fixed-dim": "#adc6ff",
+                        "primary-container": "#4c8eff",
+                        "surface": "#10131a",
+                        "primary": "#adc6ff",
+                        "on-secondary-fixed-variant": "#005144",
+                        "background": "#10131a",
+                        "on-secondary-container": "#006a5a",
+                        "inverse-surface": "#e1e2ec",
+                        "tertiary-container": "#b072fb",
+                        "inverse-on-surface": "#2d3038",
+                        "surface-container": "#1d2027",
+                        "on-tertiary": "#460084",
+                        "secondary-container": "#00f2d1",
+                        "tertiary-fixed": "#eedbff",
+                        "tertiary-fixed-dim": "#dab9ff",
+                        "secondary-fixed-dim": "#00dfc1",
+                        "surface-container-low": "#191b23",
+                        "on-tertiary-fixed-variant": "#611baa",
+                        "on-background": "#e1e2ec",
+                        "on-primary": "#002e69",
+                        "on-tertiary-fixed": "#2a0053"
+                    },
+                    "fontFamily": {
+                        "title-md": ["Space Grotesk"],
+                        "label-pixel": ["Space Mono"],
+                        "body-lg": ["Plus Jakarta Sans"],
+                        "headline-lg": ["Space Grotesk"]
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-background text-on-background font-body-lg overflow-hidden scanline-effect grid-bg h-screen w-screen flex flex-col">
+<!-- Header Section -->
+<header class="relative z-10 w-full h-20 flex items-center justify-between px-container-margin header-bg">
+<div class="flex items-center gap-4">
+<div class="w-12 h-12 bg-primary-container flex items-center justify-center pixel-corners">
+<span class="material-symbols-outlined text-on-primary-container text-2xl">monitoring</span>
+</div>
+<div>
+<h2 class="font-label-pixel text-primary text-xs uppercase tracking-widest">数字智能</h2>
+<div class="flex items-center gap-2">
+<span class="w-2 h-2 bg-secondary-fixed-dim animate-pulse"></span>
+<span class="text-on-surface-variant text-sm font-label-pixel">系统状态: 运行中</span>
+</div>
+</div>
+</div>
+<div class="absolute left-1/2 -translate-x-1/2 text-center">
+<h1 class="font-headline-lg text-headline-lg text-primary neon-text-pulse tracking-tighter">
+                西华师范数智瞭望实时大屏
+            </h1>
+<div class="flex justify-center gap-8 mt-1">
+<div class="h-[2px] w-24 bg-gradient-to-r from-transparent via-primary to-transparent"></div>
+</div>
+</div>
+<div class="flex items-center gap-6">
+<div class="text-right">
+<div class="font-label-pixel text-secondary-fixed-dim text-lg" id="current-time">12:00:00</div>
+<div class="text-xs text-on-surface-variant font-label-pixel">2024.10.24 星期四</div>
+</div>
+<div class="w-10 h-10 border border-outline-variant flex items-center justify-center pixel-corners hover:bg-surface-container-high transition-colors cursor-pointer">
+<span class="material-symbols-outlined text-on-surface-variant">settings</span>
+</div>
+</div>
+</header>
+<!-- Main Content Grid -->
+<main class="flex-1 p-gutter grid grid-cols-12 grid-rows-6 gap-gutter relative z-10">
+<!-- Top Stats Row -->
+<section class="col-span-12 row-span-1 grid grid-cols-4 gap-gutter">
+<!-- Stat 1 -->
+<div class="bg-surface-container-low/60 backdrop-blur-md border-l-4 border-primary p-4 pixel-corners flex justify-between items-center glow-border">
+<div>
+<p class="text-on-surface-variant font-label-pixel text-xs">资产总数</p>
+<h3 class="text-3xl font-display-lg text-primary mt-1">42,891</h3>
+</div>
+<div class="text-secondary-fixed-dim flex flex-col items-end">
+<span class="material-symbols-outlined text-4xl" style="font-variation-settings: 'FILL' 1;">database</span>
+<span class="text-[10px] font-label-pixel">+12.4%</span>
+</div>
+</div>
+<!-- Stat 2 -->
+<div class="bg-surface-container-low/60 backdrop-blur-md border-l-4 border-secondary-fixed-dim p-4 pixel-corners flex justify-between items-center glow-border">
+<div>
+<p class="text-on-surface-variant font-label-pixel text-xs">活跃用户</p>
+<h3 class="text-3xl font-display-lg text-secondary-fixed-dim mt-1">1,402</h3>
+</div>
+<div class="text-secondary-fixed-dim flex flex-col items-end">
+<span class="material-symbols-outlined text-4xl" style="font-variation-settings: 'FILL' 1;">group</span>
+<span class="text-[10px] font-label-pixel">实时在线</span>
+</div>
+</div>
+<!-- Stat 3 -->
+<div class="bg-surface-container-low/60 backdrop-blur-md border-l-4 border-tertiary p-4 pixel-corners flex justify-between items-center glow-border">
+<div>
+<p class="text-on-surface-variant font-label-pixel text-xs">智能查询</p>
+<h3 class="text-3xl font-display-lg text-tertiary mt-1">8,119</h3>
+</div>
+<div class="text-tertiary flex flex-col items-end">
+<span class="material-symbols-outlined text-4xl" style="font-variation-settings: 'FILL' 1;">psychology</span>
+<span class="text-[10px] font-label-pixel">SLA: 99.9%</span>
+</div>
+</div>
+<!-- Stat 4 -->
+<div class="bg-surface-container-low/60 backdrop-blur-md border-l-4 border-error p-4 pixel-corners flex justify-between items-center glow-border">
+<div>
+<p class="text-on-surface-variant font-label-pixel text-xs">系统负载</p>
+<h3 class="text-3xl font-display-lg text-error mt-1">34%</h3>
+</div>
+<div class="text-error flex flex-col items-end">
+<span class="material-symbols-outlined text-4xl" style="font-variation-settings: 'FILL' 1;">bolt</span>
+<span class="text-[10px] font-label-pixel">运行良好</span>
+</div>
+</div>
+</section>
+<!-- Left: Collection Volume -->
+<aside class="col-span-3 row-span-5 flex flex-col gap-gutter">
+<div class="bg-surface-container-low/40 backdrop-blur-lg border border-outline-variant p-4 flex-1 pixel-corners flex flex-col">
+<div class="flex items-center gap-2 mb-6">
+<div class="w-1 h-4 bg-primary"></div>
+<h4 class="font-title-md text-sm text-primary uppercase tracking-wider">各数据源采集量</h4>
+</div>
+<!-- Bar Chart Simulation -->
+<div class="flex-1 flex flex-col justify-around gap-4 px-2">
+<div class="space-y-1">
+<div class="flex justify-between text-[10px] font-label-pixel text-on-surface-variant">
+<span>学术数据库</span>
+<span class="text-primary">85%</span>
+</div>
+<div class="h-4 w-full bg-surface-container-highest pixel-corners overflow-hidden border border-outline-variant/30">
+<div class="h-full bg-primary" style="width: 85%"></div>
+</div>
+</div>
+<div class="space-y-1">
+<div class="flex justify-between text-[10px] font-label-pixel text-on-surface-variant">
+<span>社交媒体</span>
+<span class="text-secondary-fixed-dim">62%</span>
+</div>
+<div class="h-4 w-full bg-surface-container-highest pixel-corners overflow-hidden border border-outline-variant/30">
+<div class="h-full bg-secondary-fixed-dim" style="width: 62%"></div>
+</div>
+</div>
+<div class="space-y-1">
+<div class="flex justify-between text-[10px] font-label-pixel text-on-surface-variant">
+<span>内部记录</span>
+<span class="text-tertiary">44%</span>
+</div>
+<div class="h-4 w-full bg-surface-container-highest pixel-corners overflow-hidden border border-outline-variant/30">
+<div class="h-full bg-tertiary" style="width: 44%"></div>
+</div>
+</div>
+<div class="space-y-1">
+<div class="flex justify-between text-[10px] font-label-pixel text-on-surface-variant">
+<span>物联网传感器</span>
+<span class="text-error">91%</span>
+</div>
+<div class="h-4 w-full bg-surface-container-highest pixel-corners overflow-hidden border border-outline-variant/30">
+<div class="h-full bg-error" style="width: 91%"></div>
+</div>
+</div>
+<div class="space-y-1">
+<div class="flex justify-between text-[10px] font-label-pixel text-on-surface-variant">
+<span>政府开放数据</span>
+<span class="text-primary/60">28%</span>
+</div>
+<div class="h-4 w-full bg-surface-container-highest pixel-corners overflow-hidden border border-outline-variant/30">
+<div class="h-full bg-primary/60" style="width: 28%"></div>
+</div>
+</div>
+</div>
+<div class="mt-6 pt-4 border-t border-outline-variant/30">
+<p class="text-[10px] text-on-surface-variant font-label-pixel leading-tight">
+                        数据同步: 实时<br/>
+                        最后恢复: 2毫秒前
+                    </p>
+</div>
+</div>
+<!-- Mini Radar/Process -->
+<div class="h-40 bg-surface-container-low/40 backdrop-blur-lg border border-outline-variant p-4 pixel-corners relative overflow-hidden">
+<div class="flex items-center gap-2 mb-2">
+<div class="w-1 h-4 bg-secondary-fixed-dim"></div>
+<h4 class="font-title-md text-sm text-secondary-fixed-dim uppercase tracking-wider">网络脉冲</h4>
+</div>
+<!-- Simulating a visual wave or pulse -->
+<div class="absolute inset-0 flex items-center justify-center opacity-20">
+<div class="w-24 h-24 border border-secondary-fixed-dim rounded-full animate-ping"></div>
+</div>
+</div>
+</aside>
+<!-- Center: 3D Globe & Keyword Cloud -->
+<article class="col-span-6 row-span-5 relative flex flex-col">
+<!-- Floating Keyword Cloud Overlay -->
+<div class="absolute bottom-8 left-1/2 -translate-x-1/2 z-20 flex flex-wrap justify-center gap-3 w-4/5 pointer-events-none">
+<span class="px-3 py-1 bg-primary/20 border border-primary text-primary font-label-pixel text-xs pixel-corners animate-pulse">大数据</span>
+<span class="px-3 py-1 bg-secondary-fixed-dim/20 border border-secondary-fixed-dim text-secondary-fixed-dim font-label-pixel text-sm pixel-corners">人工智能算法</span>
+<span class="px-3 py-1 bg-tertiary/20 border border-tertiary text-tertiary font-label-pixel text-xs pixel-corners">智慧校园</span>
+<span class="px-3 py-1 bg-surface-variant/80 border border-outline text-on-surface font-label-pixel text-xs pixel-corners">深度学习</span>
+<span class="px-3 py-1 bg-primary/20 border border-primary text-primary font-label-pixel text-sm pixel-corners">分析预测</span>
+<span class="px-3 py-1 bg-error/20 border border-error text-error font-label-pixel text-xs pixel-corners">实时监测</span>
+<span class="px-3 py-1 bg-secondary-fixed-dim/20 border border-secondary-fixed-dim text-secondary-fixed-dim font-label-pixel text-xs pixel-corners">可视化</span>
+</div>
+<!-- Decorative HUD Brackets -->
+<div class="absolute inset-x-10 inset-y-10 border-t border-l border-primary/40 w-16 h-16 pointer-events-none"></div>
+<div class="absolute top-10 right-10 border-t border-r border-primary/40 w-16 h-16 pointer-events-none"></div>
+<div class="absolute bottom-10 left-10 border-b border-l border-primary/40 w-16 h-16 pointer-events-none"></div>
+<div class="absolute bottom-10 right-10 border-b border-r border-primary/40 w-16 h-16 pointer-events-none"></div>
+</article>
+<!-- Right: Real-time Logs -->
+<aside class="col-span-3 row-span-5 flex flex-col">
+<div class="bg-surface-container-low/40 backdrop-blur-lg border border-outline-variant p-4 flex-1 pixel-corners flex flex-col overflow-hidden">
+<div class="flex items-center justify-between mb-4">
+<div class="flex items-center gap-2">
+<div class="w-1 h-4 bg-tertiary"></div>
+<h4 class="font-title-md text-sm text-tertiary uppercase tracking-wider">最新活动</h4>
+</div>
+<span class="text-[10px] font-label-pixel text-on-surface-variant px-2 py-0.5 bg-surface-container-highest">日志版本 V2.0</span>
+</div>
+<div class="flex-1 scrolling-log overflow-y-auto space-y-3 pr-2" id="log-container">
+<!-- Log Item -->
+<div class="p-2 border-b border-outline-variant/20 hover:bg-surface-container-high transition-colors group">
+<div class="flex justify-between items-start mb-1">
+<span class="text-[10px] font-label-pixel text-primary">[信息]</span>
+<span class="text-[10px] font-label-pixel text-on-surface-variant">14:22:01</span>
+</div>
+<p class="text-xs text-on-surface font-body-sm group-hover:text-primary transition-colors">数字员工 'W-03' 处理了 120 个数智大屏节点资产。</p>
+</div>
+<div class="p-2 border-b border-outline-variant/20 hover:bg-surface-container-high transition-colors group">
+<div class="flex justify-between items-start mb-1">
+<span class="text-[10px] font-label-pixel text-secondary-fixed-dim">[鉴权]</span>
+<span class="text-[10px] font-label-pixel text-on-surface-variant">14:21:45</span>
+</div>
+<p class="text-xs text-on-surface font-body-sm group-hover:text-secondary-fixed-dim transition-colors">管理员 'Zhang_L' 访问了采集管理门户。</p>
+</div>
+<div class="p-2 border-b border-outline-variant/20 hover:bg-surface-container-high transition-colors group">
+<div class="flex justify-between items-start mb-1">
+<span class="text-[10px] font-label-pixel text-tertiary">[AI]</span>
+<span class="text-[10px] font-label-pixel text-on-surface-variant">14:21:30</span>
+</div>
+<p class="text-xs text-on-surface font-body-sm group-hover:text-tertiary transition-colors">生成了关键词 '校园人流密度' 的查询结果。</p>
+</div>
+<div class="p-2 border-b border-outline-variant/20 hover:bg-surface-container-high transition-colors group">
+<div class="flex justify-between items-start mb-1">
+<span class="text-[10px] font-label-pixel text-primary">[数据]</span>
+<span class="text-[10px] font-label-pixel text-on-surface-variant">14:20:58</span>
+</div>
+<p class="text-xs text-on-surface font-body-sm group-hover:text-primary transition-colors">从图书馆数据库同步了新一批学术记录。</p>
+</div>
+<div class="p-2 border-b border-outline-variant/20 hover:bg-surface-container-high transition-colors group">
+<div class="flex justify-between items-start mb-1">
+<span class="text-[10px] font-label-pixel text-error">[警告]</span>
+<span class="text-[10px] font-label-pixel text-on-surface-variant">14:20:12</span>
+</div>
+<p class="text-xs text-on-surface font-body-sm group-hover:text-error transition-colors">节点 #772 报告高延迟（高出平均值 15ms）。</p>
+</div>
+<div class="p-2 border-b border-outline-variant/20 hover:bg-surface-container-high transition-colors group">
+<div class="flex justify-between items-start mb-1">
+<span class="text-[10px] font-label-pixel text-primary">[信息]</span>
+<span class="text-[10px] font-label-pixel text-on-surface-variant">14:19:40</span>
+</div>
+<p class="text-xs text-on-surface font-body-sm group-hover:text-primary transition-colors">系统维护检查已完成。发现 0 个漏洞。</p>
+</div>
+</div>
+<!-- Footer Decoration -->
+<div class="mt-4 flex justify-between items-center text-[10px] font-label-pixel text-on-surface-variant">
+<span class="flex items-center gap-1"><span class="w-1.5 h-1.5 bg-secondary-fixed-dim rounded-full"></span> 流式传输中</span>
+<span>缓冲延迟: 0.4s</span>
+</div>
+</div>
+</aside>
+</main>
+<!-- Bottom Footer (Decorative) -->
+<footer class="h-8 bg-surface-container-low/80 backdrop-blur-md px-container-margin flex items-center justify-between border-t border-outline-variant/30 text-[10px] font-label-pixel text-on-surface-variant">
+<div class="flex gap-4">
+<span>坐标: 北纬30.8256°, 东经106.0645°</span>
+<span>内核版本: NEON-KERNEL-v4.2</span>
+</div>
+<div class="flex gap-4">
+<span class="text-primary">加密连接</span>
+<span class="text-secondary-fixed-dim">西华师范大学</span>
+</div>
+</footer>
+<script>
+        // Update Time
+        function updateTime() {
+            const now = new Date();
+            const timeStr = now.toLocaleTimeString('zh-CN', { hour12: false });
+            document.getElementById('current-time').textContent = timeStr;
+        }
+        setInterval(updateTime, 1000);
+        updateTime();
+
+        // Simulate scrolling log additions
+        const logMessages = [
+            { type: '信息', color: 'text-primary', text: "新节点 'X-22' 已加入同步集群。" },
+            { type: 'AI', color: 'text-tertiary', text: "已更新 '学生流失率' 数据集的预测模型。" },
+            { type: '数据', color: 'text-primary', text: "500GB 历史数据已移至冷存储。" },
+            { type: '鉴权', color: 'text-secondary-fixed-dim', text: "外部 API '政府公开数据' 身份验证成功。" }
+        ];
+
+        function addLog() {
+            const container = document.getElementById('log-container');
+            const msg = logMessages[Math.floor(Math.random() * logMessages.length)];
+            const time = new Date().toLocaleTimeString('zh-CN', { hour12: false });
+            
+            const div = document.createElement('div');
+            div.className = "p-2 border-b border-outline-variant/20 hover:bg-surface-container-high transition-colors group opacity-0 translate-x-4";
+            div.innerHTML = `
+                <div class="flex justify-between items-start mb-1">
+                    <span class="text-[10px] font-label-pixel ${msg.color}">[${msg.type}]</span>
+                    <span class="text-[10px] font-label-pixel text-on-surface-variant">${time}</span>
+                </div>
+                <p class="text-xs text-on-surface font-body-sm group-hover:${msg.color} transition-colors">${msg.text}</p>
+            `;
+            
+            container.prepend(div);
+            setTimeout(() => {
+                div.classList.remove('opacity-0', 'translate-x-4');
+                div.classList.add('transition-all', 'duration-500');
+            }, 100);
+
+            if (container.children.length > 15) {
+                container.lastElementChild.remove();
+            }
+        }
+
+        setInterval(addLog, 4000);
+    </script>
+</body></html>
